@@ -3,7 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -45,64 +45,100 @@ public class DatabaseServlet extends HttpServlet {
 	}
 	
 	/*make sure the user exsits and that his password matches that in the database
-	 * Returns 1 for bad password, 2 for bad username and 0 for Correct everything */
-	public int verifyUser(String enteredUsername) {
+	 * Returns true for good login in, and false for bad login. */
+	public boolean verifyUser(String enteredUsername, String enteredPassword) {
 
 		try {
 			if( enteredUsername != null &&  enteredUsername.length() > 0 ) {
 				databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username='" +  enteredUsername + "'");
 	
-				if (!databaseResults.isBeforeFirst() ) {    //bad username
+				if (!databaseResults.isBeforeFirst() ) {    
 				    System.out.println("No data"); 
-				    return 2;
+				    return false;
 				} 
 			
-				if(databaseResults.next()) { //while more rows, there should only be one row, since usernames are unique. 
-					String salt = databaseResults.getString("Salt");
-					String hash = databaseResults.getString("Hash");
+				if(databaseResults.next()) { // there should only be one row, since usernames are unique. 
+					String databaseSalt = databaseResults.getString("Salt");
+					String databaseHash = databaseResults.getString("Hash");
 					
-					User temp = 
+					String saltyPassword = databaseSalt + enteredPassword;
+					String tempHash = LoginHash.generateHash( saltyPassword );
+					
+					if( databaseHash.equals(tempHash)) {
+						return true;
+					}
+					
 				}
 			}
 		} catch( SQLException e) {
 			e.printStackTrace();
-			return 1;
-		}
-		finally {
-			return 2;
 		}
 		
+		return false;
 	}
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 		establishConnection();
 		String enteredUsername = request.getParameter("userName");
+		String enteredPassword = request.getParameter("password");
 		String checkingAccountDetails = request.getParameter("inputType");
 		
 		if( checkingAccountDetails.equals("login") ) {
-			int typeOfError = verifyUser( enteredUsername );
-			if(  typeOfError == 0 ) {
+			if(  verifyUser( enteredUsername, enteredPassword ) ) {
 				loadAllUsers();
-				
-			} else if( typeOfError == 1 ) {
-				request.setAttribute("pass_err", "please enter a valid password");
-			}
+			} 
 			else { 
-				request.setAttribute("name_err", "please enter a valid username");
+				request.setAttribute("login_err", "please enter a valid username or password");
 			}
 		} else if ( checkingAccountDetails.equals("register") ) {
-				
+			registerUser(request, response);//
 		}
 		
-		
-		
-		closeSQLObjects();
+	closeSQLObjects();
 	}
 	
 	/* Creating all the user objects with all their shit, like name/id etc. 
-	 * These objects are sset to an request object so they can be accessed in the jsp if needed */
+	 * These objects are set to an request object so they can be accessed in the jsp if needed */
 	public void loadAllUsers() {
-		 allUsers = new ArrayList<User>();
+		allUsers = new ArrayList<User>();
+		 
+		try {
+			databaseResults = statement.executeQuery("SELECT * FROM User");
+			
+			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
+				
+				int userID = databaseResults.getInt("UserID");
+				String name = databaseResults.getString("Name");
+				String username = databaseResults.getString("UserName");
+				String userStatus = databaseResults.getString("UserStatus");
+				String salt =  databaseResults.getString("Salt");
+				String hash =  databaseResults.getString("Hash");
+				int friendId = databaseResults.getInt("FriendID");
+				String email = databaseResults.getString("Email");
+				String phoneNumber = databaseResults.getString("PhoneNumber");
+				
+				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email, friendId );
+				allUsers.add(tempUser);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+	}
+	
+	/* Creates all the user information using the servlet request objects. 
+	 * 
+	 * */
+	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
+		
+		/* TODO to be implemented once reigster button/page is created
+		 User tempUser = new User(String real_name, String user_name, String hash, String salt,
+		int id, String status, String phoneNumber, String email  ) 
+		 //allUsers.add(tempUser);
+		  * 
+		  */
 	}
 	
 	public void closeSQLObjects() {

@@ -15,7 +15,7 @@ public class LoginHash  {
 	/* From a given password and salt, uses the SHA-256 encoding system to return a hashed key
 	 * This key is used to compare to the database key when users log in. 
 	 */
-	public String generateHash(String password) {
+	public static String generateHash(String password) {
 		
 		String encodedSalt = getSalt();
 		String passwordAndSalt = encodedSalt + password;

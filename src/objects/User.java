@@ -12,23 +12,26 @@ public class User {
 	private String username;
 	private String hashedPassword;
 	private BufferedImage profileImage;
-	private int id;
+	private int userId;
 	private String status;
 	private String phoneNumber;
 	private String email;
 	private Settings userSettings;
+	private int friendId;
 	//private ArrayList<Messages> savedMessages();
 	private ArrayList<User> friendsList;
 
 	
-	public User(String real_name, String user_name, String hash, String salt, int id, String status, String phoneNumber, String email  ) {
+	public User(String real_name, String user_name, String hash, String salt, int id, String status, String phoneNumber, String email, int friendID ) {
+		this.userId = id;
 		this.fullName = real_name;
 		this.username = user_name;
 		this.hashedPassword = hash;
 		this.salt = salt;
 		this.status = status;
 		this.phoneNumber = phoneNumber;
-		
+		this.email = email;
+		this.friendId = friendID;
 	}
 	
 
@@ -61,8 +64,8 @@ public class User {
 	}
 
 
-	public void setId(int id) {
-		this.id = id;
+	public void setUserId(int id) {
+		this.userId = id;
 	}
 
 
