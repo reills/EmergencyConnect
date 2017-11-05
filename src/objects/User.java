@@ -17,12 +17,11 @@ public class User {
 	private String phoneNumber;
 	private String email;
 	private Settings userSettings;
-	private int friendId;
 	//private ArrayList<Messages> savedMessages();
-	private ArrayList<User> friendsList;
+	private ArrayList<Integer> friendsList;
 
 	
-	public User(String real_name, String user_name, String hash, String salt, int id, String status, String phoneNumber, String email, int friendID ) {
+	public User(String real_name, String user_name, String hash, String salt, int id, String status, String phoneNumber, String email ) {
 		this.userId = id;
 		this.fullName = real_name;
 		this.username = user_name;
@@ -31,7 +30,6 @@ public class User {
 		this.status = status;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.friendId = friendID;
 	}
 	
 
@@ -68,7 +66,10 @@ public class User {
 		this.userId = id;
 	}
 
-
+	public int getUserId() {
+		return userId;
+	}
+	
 	public void setStatus(String status) {
 		this.status = status;
 	}
@@ -87,9 +88,13 @@ public class User {
 	public void setUserSettings(Settings userSettings) {
 		this.userSettings = userSettings;
 	}
+	
+	public void addFriend(int id) {
+		friendsList.add( id );
+	}
 
 
-	public void setFriendsList(ArrayList<User> friendsList) {
+	public void getFriendsList(ArrayList<Integer> friendsList) {
 		this.friendsList = friendsList;
 	}
 
