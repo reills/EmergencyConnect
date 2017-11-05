@@ -57,8 +57,54 @@
 			  }
 			});
 		}
+		
+		function closeLogin() {
+			$("#loginButton").hide();
+			$("#registerButton").hide();
+			$("#accountButton").show();
+		}
 	</script>
 	
+	<style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .login-modal, .register-modal  {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 	</head>
 	
 	<body>
@@ -119,14 +165,20 @@
 		                        </li>
 		                        
 		                        <li>
-		                              <a href="#">
-		                                    Login
+		                              <a id="loginButton">
+		                                    Log In
 		                              </a>
 		                        </li>
 		                        
 		                        <li>
-		                              <a href="#">
+		                              <a id="registerButton">
 		                                    Register
+		                              </a>
+		                        </li>
+		                        
+		                        <li>
+		                              <a id="accountButton" style="display:none">
+		                                    Account
 		                              </a>
 		                        </li>
 		                    </ul>
@@ -137,6 +189,7 @@
 		        
 				<!-- reFRESH this page... TEMP -->
 				<button type="button" onclick='fetch()'>fetch!</button>
+				<button type="button" onclick='closeLogin()'>close log in</button>
 				<div id="jsonContent"></div>
 				
 				
@@ -242,6 +295,45 @@
 				</div>
 			</div>
 			
+			 <div id="loginModal" class="modal">
+
+            <!-- Modal content -->
+             <div class="login-modal">
+                <span class="close" id= "loginClose">&times;</span>
+                 <div id="loginContainer" >
+                     <form method="GET" >
+                     <h2>Log In</h2> <br/>
+                      <label><br/>Username: </label><input type="text" name="username"><br/>
+                      <label><br/>Password: </label><input type="text" name="password"><br/>
+
+                     <!-- Button calls show() on click-->
+                     <input type="submit" onclick='hideForm()' value="Log In"/>
+                    </form>
+                 </div>
+            </div>
+
+        </div>
+
+        <!-- Form -->
+        <div id="registerModal" class="modal"> 
+            <div class="register-modal">
+                <span class="close" id="registerClose">&times;</span> 
+                <div id="registerContainer">
+                            <form>
+                              <h2>Register</h2> <br/>
+                              <label>First Name: </label><input type="text" name="fname"><br/>
+                              <label><br/>Last Name: </label><input type="text" name="lname"><br/>
+                              <label><br/>Username: </label><input type="text" name="username"><br/>
+                              <label><br/>Password: </label><input type="text" name="password"><br/>
+                              <label><br/>Email: </label><input type="text" name="email"><br/>
+                              <label><br/>Phone Number: </label><input type="text" name="phoneNumber"><br/>
+                            </form>
+
+                             <!-- Button calls show() on click-->
+                            <button type="button" onclick='hideForm()'>Register</button>
+                </div>
+            </div>
+        </div>
 	
 	</body>
 	
@@ -261,4 +353,58 @@
     <!-- Light Bootstrap Table Core javascript and methods -->
 	<script src="assets/js/light-bootstrap-dashboard.js"></script>
 	
+    <script>
+       // Get the modal
+       var loginModal = document.getElementById('loginModal');
+
+       // Get the button that opens the modal
+       var loginButton = document.getElementById("loginButton");
+
+       // Get the <span> element that closes the modal
+       var loginClose = document.getElementById("loginClose");
+
+       // When the user clicks the button, open the modal 
+       loginButton.onclick = function() {
+           loginModal.style.display = "block";
+       }
+
+       // When the user clicks on <span> (x), close the modal
+       loginClose.onclick = function() {
+           loginModal.style.display = "none";
+       }
+
+
+       // Get the modal
+       var registerModal = document.getElementById('registerModal');
+
+       // Get the button that opens the modal
+       var registerButton = document.getElementById("registerButton");
+
+       // Get the <span> element that closes the modal
+       var registerClose = document.getElementById("registerClose");
+
+       // When the user clicks the button, open the modal 
+       registerButton.onclick = function() {
+           registerModal.style.display = "block";
+       }
+
+       // When the user clicks on <span> (x), close the modal
+       registerClose.onclick = function() {
+           registerModal.style.display = "none";
+       }
+
+
+       function showForm() {
+           $("#loginContainer").show();
+       }
+
+       function hideForm() {
+           $("#loginContainer").hide();
+       }
+
+       function toggleForm() {
+           $("#loginContainer").toggle();
+       }
+   </script>
+   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 </html>
