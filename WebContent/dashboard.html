@@ -31,6 +31,32 @@
 		    alert('ok');
 		}
 		
+		// Refresh AJAX calls
+
+		function fetch() {
+		    console.log("Fetching news...");
+
+		    // First AJAX request to get news JSON
+			$.ajax({
+			  dataType: "json",
+			  url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
+			  success: function(response) {
+			  	console.log(response);
+			  	// Second AJAX request to generate content from news JSON
+			  	/*
+				$.ajax({
+					  dataType: "text",
+					  url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
+					  success: function(response) {
+					  	var news = response;
+					  	console.log(news);
+					  	$("#jsonContent").html(JSON.stringify(news));
+					  	
+					  }
+					});*/
+			  }
+			});
+		}
 	</script>
 	
 	</head>
@@ -107,8 +133,13 @@
 		                </div>
 		            </div>
 		        </nav>
-		
-		
+		        
+		        
+				<!-- reFRESH this page... TEMP -->
+				<button type="button" onclick='fetch()'>fetch!</button>
+				<div id="jsonContent"></div>
+				
+				
 		        <div class="content">
 		            <div class="container-fluid">
 		                <div class="row">
@@ -210,11 +241,11 @@
 				    </div>
 				</div>
 			</div>
+			
 	
 	</body>
 	
-    
-    <!--   Core JS Files   -->
+	<!--   Core JS Files   -->
     <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
 	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
@@ -227,27 +258,7 @@
     <!--  Notifications Plugin    -->
     <script src="assets/js/bootstrap-notify.js"></script>
 
-    <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
     <!-- Light Bootstrap Table Core javascript and methods -->
 	<script src="assets/js/light-bootstrap-dashboard.js"></script>
-	
-	<!-- What does Firebase do? -->
-	<script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
-	<script>
-	  // Initialize Firebase
-	  var config = {
-	    apiKey: "AIzaSyBv6Enf_gx8tM5W0qFWOu9lnypQQYcGSds",
-	    authDomain: "emergenc-5a78c.firebaseapp.com",
-	    databaseURL: "https://emergenc-5a78c.firebaseio.com",
-	    projectId: "emergenc-5a78c",
-	    storageBucket: "",
-	    messagingSenderId: "632727256649"
-	  };
-	  firebase.initializeApp(config);
-	</script>
-	
-
 	
 </html>
