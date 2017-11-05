@@ -79,19 +79,19 @@ public class DatabaseServlet extends HttpServlet {
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 		establishConnection();
-		String enteredUsername = request.getParameter("userName");
+		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		String checkingAccountDetails = request.getParameter("inputType");
 		
 		if( checkingAccountDetails.equals("login") ) {
 			if(  verifyUser( enteredUsername, enteredPassword ) ) {
-				loadAllUsers();
+				//loadAllUsers();
 			} 
 			else { 
 				request.setAttribute("login_err", "please enter a valid username or password");
 			}
 		} else if ( checkingAccountDetails.equals("register") ) {
-			registerUser(request, response);//
+			registerUser(request, response); 
 		}
 		
 	closeSQLObjects();
@@ -113,11 +113,10 @@ public class DatabaseServlet extends HttpServlet {
 				String userStatus = databaseResults.getString("UserStatus");
 				String salt =  databaseResults.getString("Salt");
 				String hash =  databaseResults.getString("Hash");
-				int friendId = databaseResults.getInt("FriendID");
 				String email = databaseResults.getString("Email");
 				String phoneNumber = databaseResults.getString("PhoneNumber");
 				
-				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email, friendId );
+				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
 				allUsers.add(tempUser);
 			}
 			
@@ -125,7 +124,6 @@ public class DatabaseServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 
 	}
 	
 	/* Creates all the user information using the servlet request objects. 
@@ -133,14 +131,68 @@ public class DatabaseServlet extends HttpServlet {
 	 * */
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
 		
-		/* TODO to be implemented once reigster button/page is created
-		 User tempUser = new User(String real_name, String user_name, String hash, String salt,
-		int id, String status, String phoneNumber, String email  ) 
-		 //allUsers.add(tempUser);
-		  * 
-		  */
+		String enteredUsername = request.getParameter("username");
+		String enteredPassword = request.getParameter("password");
+		
+		// All info from registration form. 
+		String id = request.getParameter("UserID");
+		String name = request.getParameter("Name");
+		String username = request.getParameter("UserName");
+		String email = request.getParameter("Email");
+		String phoneNumber = request.getParameter("PhoneNumber");
+		int userID = Integer.parseInt(id);
+		
+		String userStatus = "Just signed up! ";
+		String salt =  LoginHash.getSalt();
+		String hash =  LoginHash.generateHash(salt + enteredPassword);
+		
+		User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
+		allUsers.add(tempUser);
+		
+		try { // add User to the database.
+			statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  name + "'," + username + "'," +  userStatus + "'," + 
+					salt + "'," + hash + "'," + email + "'," + phoneNumber + "')");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	/*
+	 * Given the parameter userID, adds a friend ( based on the parameter friendID) to that Id's friends list
+	 * */
+	public void addUser(int userId, int friendId) {
+		establishConnection();
+		
+		User temp = getUser( userId);
+		
+		if( temp != null ) {
+			temp.addFriend(friendId);
+		}
+		
+		try {
+			statement.executeUpdate("INSERT INTO Relationship VALUES ( '" + userId + "'," + friendId + "')");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*returns a user from a given id*/
+	public User getUser(int id) {
+		User temp = null; 
+		
+		for( int i = 0; i < allUsers.size(); i++ ) {
+			if( allUsers.get(i).getUserId() == id) {
+				temp = allUsers.get(i);
+			}
+		}
+		
+	return temp;
+	}
+	
+	/*
+	 * Close all the SQL objects!!
+	 * */
 	public void closeSQLObjects() {
 		try { 
 			

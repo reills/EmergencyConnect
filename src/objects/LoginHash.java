@@ -37,7 +37,7 @@ public class LoginHash  {
 	 * this salt is unique for each new user
 	 * lastly, the method calls generateHash to combine the salt and hash for the final encrypted string
 	 */
-	private static String getSalt()  {
+	public static String getSalt()  {
         SecureRandom random = null;
         
 		try {
