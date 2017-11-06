@@ -34,8 +34,8 @@ public class DatabaseServlet extends HttpServlet {
 	public void establishConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			databaseConnection = DriverManager.getConnection("jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com"
-					+ "/?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false"); //using amazon connection
+			databaseConnection = DriverManager.getConnection("jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com/EmergencyConnectStorage"
+					+ "?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false"); //using amazon connection
 			statement = databaseConnection.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -77,22 +77,24 @@ public class DatabaseServlet extends HttpServlet {
 		return false;
 	}
 	
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 		establishConnection();
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		String checkingAccountDetails = request.getParameter("inputType");
 		
-		if( checkingAccountDetails.equals("login") ) {
-			if(  verifyUser( enteredUsername, enteredPassword ) ) {
-				//loadAllUsers();
-			} 
-			else { 
-				request.setAttribute("login_err", "please enter a valid username or password");
-			}
-		} else if ( checkingAccountDetails.equals("register") ) {
-			registerUser(request, response); 
-		}
+		response.getWriter().write("FAILURE");
+		
+//		if( checkingAccountDetails.equals("login") ) {
+//			if(  verifyUser( enteredUsername, enteredPassword ) ) {
+//				//loadAllUsers();
+//			} 
+//			else { 
+//				request.setAttribute("login_err", "please enter a valid username or password");
+//			}
+//		} else if ( checkingAccountDetails.equals("register") ) {
+//			registerUser(request, response); 
+//		}
 		
 	closeSQLObjects();
 	}
