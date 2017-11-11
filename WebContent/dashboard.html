@@ -53,6 +53,26 @@
          	$("#registerButton").hide();
          	$("#accountButton").show();
          }
+         
+         
+       //call database to check
+            $(document).ready(function() {
+
+         	  $("#loginSubmit").click(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+         	        $.get("DatabaseServlet", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+         	        	console.log("calledGET");
+         	         	
+         	        	if($(responseText) == 'FAILURE'){
+         	        			$("#messageDiv").html("<font color='green'>You are successfully logged in. </font>"); 
+         	        			console.log("success");
+         	           	 } else {
+         	            		$('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
+         	            		console.log("false");
+         	            	}
+         	        });
+         	  });
+            })
+
       </script>
       
       <style>
@@ -429,50 +449,6 @@
       }
       
       //call database to check
-      $("#loginSubmit").on('click', function(){
-    	  	  console.log("testing");
-          var username = $("#username").val();
-          var password = $("#password").val();
-          if(username == ""){
-              $('#messageDiv').css("display","none");
-              alert("Username is required");
-              return;
-          }
-          if(password == ""){
-              $('#messageDiv').css("display","none");
-              alert("Password is required");
-              return;
-          }
-          $.ajax({
-              url : "${pageContext.request.contextPath}/DatabaseServlet",
-              method : GET,
-              data : {
-                  username : username,
-                  password : password
-              },
-              success : function(results){
-                  if(results != null && results != ""){
-                      showMessage(results);
-                      $('#messageDiv').css("display","block");
-                  }else{
-                      $('#messageDiv').css("display","none");
-                      $('#messageDiv').html("");
-                      alert("Some exception occurred! Please try again.");
-                  }
-              }
-          });
-      });
-      
-    //function to display message to the user
-      function showMessage(results){
-          if(results == 'SUCCESS'){
-              $('#messageDiv').html("<font color='green'>You are successfully logged in. </font>")
-          }else if(results == 'FAILURE'){
-              $('#messageDiv').html("<font color='red'>Username or password incorrect </font>")
-          }
-      }
-      
-      
       
    </script>
    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
