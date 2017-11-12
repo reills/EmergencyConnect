@@ -6,8 +6,15 @@
 		<!-- jQuery -->
 		<script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
 
+		    <link rel="stylesheet" type="text/css" href="assets/css/master.css">
+		    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet">
+		    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+		    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet">
+
 		<script>
-		function fetch() {
+		function fetchNews() {
 			console.log("Fetching news...");
 
 			// AP
@@ -18,17 +25,21 @@
 				success: function(response) {
 					// "response" is a JSON with the returned data
 					console.log(response);
+					output_element = "#card";
 					// "articles" is an array of articles
 					articles = response.articles;
-
-					$("#content").append("<h2>from AP:</h2><hr>");
 					for (var i = 0; i < articles.length; i++) {
 						currentArticle = articles[i];
-						$("#content").append("<a href=" + JSON.stringify(currentArticle.url) + "><h3>" + JSON.stringify(currentArticle.title) + "</h3><a/>");
 
-						$("#content").append("<p>" + clean_stringify(currentArticle.description) + "</p>");
-						$("#content").append("<img height='120px' src='" + currentArticle.urlToImage + "'>");
-						$("#content").append("<hr>");
+						img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
+						title = JSON.stringify(currentArticle.title);
+						url = JSON.stringify(currentArticle.url);
+						description = "<p>" + clean_stringify(currentArticle.description) + "</p>";
+
+						$(output_element).append("<div class='card'><div class='header'>")
+						$(output_element).append("<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>");
+						$(output_element).append("<p class='category'>Subtitle</p></div>");
+						$(output_element).append("<div class='content'>" + img + description + "</div></div>");
 					}
 				}
 			});
@@ -37,12 +48,15 @@
 				return JSON.stringify(input_string).replace("\\", "").replace("\\", "").replace("\\", "").replace("\\", "");
 			}
 		}
+
 		</script>
 	</head>
 
 	<body>
-	<button type="button" onclick='fetch()'>fetch!</button>
+	<button type="button" onclick='fetchNews()'>fetch!</button>
+	<button type="button" onclick='fetchTwitter()'>fetch!</button>
 	<h1>Fetched data:</h1>
-	<div id="content"></div>
+	<div id="card"></div>
 	</body>
 </html>
+
