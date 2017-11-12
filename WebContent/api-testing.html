@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+		<title>API TESTING</title>
+		<!-- jQuery -->
+		<script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
+
+		<script>
+		function fetch() {
+			console.log("Fetching news...");
+			$.ajax({
+				dataType: "json",
+				// Grabs JSON from url
+				url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
+				success: function(response) {
+					// Log response and add response text to page
+					console.log(response);
+					$("#content").html(JSON.stringify(response));
+				}
+			});
+		}
+		</script>
+	</head>
+
+	<body>
+	<button type="button" onclick='fetch()'>fetch!</button>
+	<div id="content">Fetched data will appear here.</div>
+	</body>
+</html>
