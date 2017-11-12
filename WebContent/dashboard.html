@@ -18,60 +18,59 @@
            alert('ok');
        }
        
-       function closeLogin() {
-        $("#loginButton").hide();
-        $("#registerButton").hide();
-        $("#accountButton").show();
-       }
-       
-    //call database to check
-       $(document).ready(function() {
-
-        $("#loginSubmit").click(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-              var params = {
-    			                   username: $('#loginUsername').val(),
-    			                   password: $('#loginPassword').val(),
-    			                   inputType: "login"
-    			               }; 
-      		$.post("DatabaseServlet", $.param(params), function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
-                console.log("calledGET");        
       
-                if($(responseText) == 'FAILURE'){
-                	$("#messageDiv").html("<font color='green'>You are successfully logged in. </font>"); 
-                    console.log("success");
-               	} else {
-                      $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
-                      console.log("false");
-                }
-              });
-        });
-       })
+    //call database to check
+       $(document).ready(function() {
+        $("#loginSubmit").click(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+              var params = {
+    			  username: $('#loginUsername').val(),
+    			  password: $('#loginPassword').val(),
+    			  inputType: "login"
+    			}; 
+      		$.post("DatabaseServlet", $.param(params), function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                console.log(responseText);        
+      
+                if( responseText == "VALID"){
+                	    $("#loginButton").hide();
+                    $("#loginModal").hide();
+                    $("#registerButton").hide();
+                    $("#accountButton").html("Welcome, " + params.username);
+                    $("#accountButton").show();
+               	} else {
+                      $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
+                      console.log("false");
+                }
+              });
+        });
+       })
     
     	//call database to register user
        	$(document).ready(function() {
-       		$("#registerSubmit").click(function({
+       		$("#registerSubmit").click(function() {
        			var params = {
-                	username: $('#registerUsername').val(),
+                		username: $('#registerUsername').val(),
 					firstName: $('#registerfName').val(),
 					lastName: $('#registerlName').val(),
-                    password: $('#registerPassword').val(),
+                    password: $('#registerPassword').val(),
 				    email: $('#registerEmail').val(),
 				    phoneNumber: $('#registerPhoneNumber').val(),
-                    inputType: "register"
-                }; 
+                    inputType: "register"
+                }; 
        			$.post("DatabaseServlet", $.param(params), function(responseText) {
        				console.log("calledPOST");
-       				if($(responseText) == 'userRegistered'){
-     	        			$('#secondMessageDiv').html("<font color='green'>You have been successfully registered. </font>");
-     	            		console.log("success");
-     	           	 } else {
-     						$("#secondMessageDiv").html("<font color='green'>This username is already taken. Please choose another username.</font>"); 
-     	        			console.log("fail");
-     	            }
+       				if( responseText == 'userRegistered'){
+       				 	$("#loginButton").hide();
+                    	 	$("#registerModal").hide();
+                     	$("#registerButton").hide();
+                     	$("#accountButton").html("Welcome, " + params.username);
+                     	$("#accountButton").show();
+     	           	 } else {
+     						$("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>"); 
+     	        			console.log("fail");
+     	            }
        			});
        		});
        	})
-
         function fetchAP() {
         console.log("Fetching news from AP...");
         $.ajax({
@@ -87,12 +86,10 @@
             articles = response.articles;
             for (var i = 0; i < articles.length; i++) {
               currentArticle = articles[i];
-
               img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
               title = JSON.stringify(currentArticle.title);
               url = JSON.stringify(currentArticle.url);
               description = "<p>" + clean_stringify(currentArticle.description) + "</p>";
-
               $(output_element).append("<div class='card'>"
                                       + "<div class='header'>"
                                         + "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>"
@@ -104,7 +101,6 @@
           }
         });
       }
-
       function clean_stringify(input_string) {
           return JSON.stringify(input_string).replace("\\", "").replace("\\", "").replace("\\", "").replace("\\", "");
       }
@@ -194,7 +190,6 @@
                 <div class="col-md-6">
                    <div class="row">
                       <div class="col-md-12" id="APNews" style="padding-left: 0">
-
                       </div>
                    </div>
                    <div class="row">
@@ -300,7 +295,7 @@
                 </table>
                 <!-- Button calls show() on click-->
                 <button id="loginSubmit" type="button" value="Log In">Login</button>
-                <div id="messageDiv" style="display:none;"></div>
+                <div id="messageDiv" ></div>
              </form>
           </div>
        </div>
@@ -365,19 +360,18 @@
                 </table>
              </form>
              <!-- Button calls show() on click-->
-             <button id="registerSubmit" type="button" onclick='hideForm()'>Register</button>
+             <button id="registerSubmit" type="button" >Register</button>
+             <div id="messageRegister" ></div>
           </div>
        </div>
     </div>
   </body>
-
   <!--   Core JS Files   -->
   <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
   <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="assets/js/bootstrap-notify.js"></script>
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
   <script>
     // Open and close login form
     $("#loginButton").click(function() {
@@ -386,7 +380,6 @@
     $("#loginClose").click(function() {
         $("#loginModal").hide();
     })
-
     // Open and close register form
     $("#registerButton").click(function() {
         $("#registerModal").show();
@@ -394,7 +387,7 @@
     $("#registerClose").click(function() {
         $("#registerModal").hide();
     })
+   
   </script>
-
 </html>
   
