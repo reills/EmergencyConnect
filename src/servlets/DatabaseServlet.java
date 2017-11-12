@@ -28,8 +28,8 @@ public class DatabaseServlet extends HttpServlet {
 	private Connection databaseConnection = null;
 	private Statement statement = null;
 	private ResultSet databaseResults = null;
-	private String mySqlUsername = "";
-	private String mySqlPassword= "";
+	private String mySqlUsername = "root";
+	private String mySqlPassword= "Mochidog2017!";
      
 	
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
@@ -152,22 +152,23 @@ public class DatabaseServlet extends HttpServlet {
 			}
 			
 			// All info from registration form. 
-			String id = request.getParameter("UserID");
-			String name = request.getParameter("Name");
-			String username = request.getParameter("UserName");
-			String email = request.getParameter("Email");
-			String phoneNumber = request.getParameter("PhoneNumber");
+//			String id = request.getParameter("UserID");
+			String fName = request.getParameter("firstName");
+			String lName = request.getParameter("lastName");
+			String email = request.getParameter("email");
+			String fullName = fName + " " + lName;
+			String phoneNumber = request.getParameter("phoneNumber");
 			int userID = Integer.parseInt(id);
 			
 			String userStatus = "Just signed up! ";
 			String salt =  LoginHash.getSalt();
 			String hash =  LoginHash.generateHash(salt + enteredPassword);
 			
-			User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
+			User tempUser = new User(fullName, enteredUsername, hash, salt, userID, userStatus, phoneNumber, email );
 			allUsers.add(tempUser);
 			
 			try { // add User to the database.
-				statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  name + "'," + username + "'," +  userStatus + "'," + 
+				statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  fullName + "'," + enteredUsername + "'," +  userStatus + "'," + 
 						salt + "'," + hash + "'," + email + "'," + phoneNumber + "')");
 			} catch (SQLException e) {
 				e.printStackTrace();
