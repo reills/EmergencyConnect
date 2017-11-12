@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 
 public class LoginHash  {
@@ -21,8 +20,12 @@ public class LoginHash  {
 				e.printStackTrace();
 			}
 		
-		String hex = (new HexBinaryAdapter()).marshal(messageDigest.digest(passwordAndSalt.getBytes()));
-		return hex;
+	    byte[] hash = messageDigest.digest(passwordAndSalt.getBytes(StandardCharsets.UTF_8));
+	    
+		//String hex = (new HexBinaryAdapter()).marshal(messageDigest.digest(passwordAndSalt.getBytes()) );
+		String encodedSalt = new String(java.util.Base64.getMimeEncoder().encode(hash) );
+		//System.out.println("encodedSalt: " + encodedSalt);
+		return encodedSalt;
 	}
 	
 	/*
@@ -47,6 +50,16 @@ public class LoginHash  {
         	
         return encodedSalt;
     }
+	
+	
+	public static void main(String args[]) {
+		String hash = generateHash("tree");
+		System.out.println("hash1: " + hash);
+		hash = generateHash("tree");
+		System.out.println("hash2: " + hash);
+		hash = generateHash("tree");
+		System.out.println("hash3: " + hash);
+	}
 
 }
 
