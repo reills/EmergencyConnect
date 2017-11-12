@@ -142,26 +142,43 @@ public class DatabaseServlet extends HttpServlet {
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		
-		// All info from registration form. 
-		String id = request.getParameter("UserID");
-		String name = request.getParameter("Name");
-		String username = request.getParameter("UserName");
-		String email = request.getParameter("Email");
-		String phoneNumber = request.getParameter("PhoneNumber");
-		int userID = Integer.parseInt(id);
-		
-		String userStatus = "Just signed up! ";
-		String salt =  LoginHash.getSalt();
-		String hash =  LoginHash.generateHash(salt + enteredPassword);
-		
-		User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
-		allUsers.add(tempUser);
-		
-		try { // add User to the database.
-			statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  name + "'," + username + "'," +  userStatus + "'," + 
-					salt + "'," + hash + "'," + email + "'," + phoneNumber + "')");
-		} catch (SQLException e) {
-			e.printStackTrace();
+		//check if the username already exists
+		if(!userExists(enteredUsername)){
+			
+			try{
+				response.getWriter().write("userRegistered");
+			}catch(IOException ioe){
+				System.out.println(ioe.getMessage());
+			}
+			
+			// All info from registration form. 
+			String id = request.getParameter("UserID");
+			String name = request.getParameter("Name");
+			String username = request.getParameter("UserName");
+			String email = request.getParameter("Email");
+			String phoneNumber = request.getParameter("PhoneNumber");
+			int userID = Integer.parseInt(id);
+			
+			String userStatus = "Just signed up! ";
+			String salt =  LoginHash.getSalt();
+			String hash =  LoginHash.generateHash(salt + enteredPassword);
+			
+			User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
+			allUsers.add(tempUser);
+			
+			try { // add User to the database.
+				statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  name + "'," + username + "'," +  userStatus + "'," + 
+						salt + "'," + hash + "'," + email + "'," + phoneNumber + "')");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else{
+			try{
+				response.getWriter().write("userExists");
+			}catch(IOException ioe){
+				System.out.println(ioe.getMessage());
+			}
+			
 		}
 	}
 	
@@ -196,6 +213,19 @@ public class DatabaseServlet extends HttpServlet {
 		}
 		
 	return temp;
+	}
+	
+	/*Check if user exists*/
+	public boolean userExists(String username){
+		boolean userExists = false;
+		User currUser = null;
+		for(int i=0; i<allUsers.size(); i++){
+			currUser = allUsers.get(i);
+			if(currUser.getUsername().equals(username)){
+				userExists = true;
+			}
+		}
+		return userExists;
 	}
 	
 	/*
