@@ -41,6 +41,22 @@
               });
         });
        })
+    
+    	//call database to register user
+       	$(document).ready(function() {
+       		$("#registerSubmit").click(function({
+       			$.post("DatabaseServlet", function(responseText) {
+       				console.log("calledPOST");
+       				if($(responseText) == 'userRegistered'){
+     	        			$('#secondMessageDiv').html("<font color='green'>You have been successfully registered. </font>");
+     	            		console.log("success");
+     	           	 } else {
+     						$("#secondMessageDiv").html("<font color='green'>This username is already taken. Please choose another username.</font>"); 
+     	        			console.log("fail");
+     	            }
+       			});
+       		});
+       	})
 
         function fetchAP() {
         console.log("Fetching news from AP...");
