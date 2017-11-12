@@ -14,9 +14,16 @@
 				// Grabs JSON from url
 				url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
 				success: function(response) {
-					// Log response and add response text to page
+					// "response" is a JSON with the returned data
 					console.log(response);
-					$("#content").html(JSON.stringify(response));
+					// "articles" is an array of articles
+					articles = response.articles;
+
+					for (var i = 0; i < articles.length; i++) {
+						currentArticle = articles[i];
+						$("#content").append("<p>" + JSON.stringify(currentArticle) + "</p>");
+					}
+
 				}
 			});
 		}
@@ -25,6 +32,7 @@
 
 	<body>
 	<button type="button" onclick='fetch()'>fetch!</button>
-	<div id="content">Fetched data will appear here.</div>
+	<h3>Fetched data:</h3>
+	<div id="content"></div>
 	</body>
 </html>
