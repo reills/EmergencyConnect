@@ -11,6 +11,7 @@
       <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
       <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
       <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet">
+      <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
       
       <script>
          function codeAddress() {
@@ -389,63 +390,32 @@
          </div>
       </div>
    </body>
+   
    <!--   Core JS Files   -->
    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
    <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-   <!--  Checkbox, Radio & Switch Plugins -->
-   <script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
-   <!--  Charts Plugin -->
-   <script src="assets/js/chartist.min.js"></script>
-   <!--  Notifications Plugin    -->
    <script src="assets/js/bootstrap-notify.js"></script>
-   <!-- Light Bootstrap Table Core javascript and methods -->
    <script src="assets/js/light-bootstrap-dashboard.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
    <script>
-      
-   	// Get the modal
-      var loginModal = document.getElementById('loginModal');
-      // Get the button that opens the modal
-      var loginButton = document.getElementById("loginButton");
-      // Get the <span> element that closes the modal
-      var loginClose = document.getElementById("loginClose");
-      // When the user clicks the button, open the modal 
-      loginButton.onclick = function() {
-          loginModal.style.display = "block";
-      }
-      // When the user clicks on <span> (x), close the modal
-      loginClose.onclick = function() {
-          loginModal.style.display = "none";
-      }
-      // Get the modal
-      var registerModal = document.getElementById('registerModal');
-      // Get the button that opens the modal
-      var registerButton = document.getElementById("registerButton");
-      // Get the <span> element that closes the modal
-      var registerClose = document.getElementById("registerClose");
-      // When the user clicks the button, open the modal 
-      registerButton.onclick = function() {
-          registerModal.style.display = "block";
-      }
-      // When the user clicks on <span> (x), close the modal
-      registerClose.onclick = function() {
-          registerModal.style.display = "none";
-      }
-      
-      function showForm() {
+   
+      // Open and close login form
+      $("#loginButton").click(function() {
           $("#loginModal").show();
-      }
-      function hideForm() {
+      })
+      $("#loginClose").click(function() {
           $("#loginModal").hide();
-      }
-      function toggleForm() {
-          $("#loginModal").toggle();
-      }
-      
-      //call database to check
-      
+      })
+
+      // Open and close register form
+      $("#registerButton").click(function() {
+         $("#registerModal").show();
+      })
+      $("#registerClose").click(function() {
+         $("#registerModal").hide();
+      })
    </script>
    
-   <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </html>
 	
