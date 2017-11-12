@@ -28,16 +28,21 @@
        $(document).ready(function() {
 
         $("#loginSubmit").click(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
-              $.get("DatabaseServlet", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
-                console.log("calledGET");
-                
+              var params = {
+    			                   username: $('#loginUsername').val(),
+    			                   password: $('#loginPassword').val(),
+    			                   inputType: "login"
+    			               }; 
+      		$.post("DatabaseServlet", $.param(params), function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                console.log("calledGET");        
+      
                 if($(responseText) == 'FAILURE'){
-                    $("#messageDiv").html("<font color='green'>You are successfully logged in. </font>"); 
+                	$("#messageDiv").html("<font color='green'>You are successfully logged in. </font>"); 
                     console.log("success");
-                   } else {
+               	} else {
                       $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
                       console.log("false");
-                    }
+                }
               });
         });
        })
@@ -45,7 +50,16 @@
     	//call database to register user
        	$(document).ready(function() {
        		$("#registerSubmit").click(function({
-       			$.post("DatabaseServlet", function(responseText) {
+       			var params = {
+                	username: $('#registerUsername').val(),
+					firstName: $('#registerfName').val(),
+					lastName: $('#registerlName').val(),
+                    password: $('#registerPassword').val(),
+				    email: $('#registerEmail').val(),
+				    phoneNumber: $('#registerPhoneNumber').val(),
+                    inputType: "register"
+                }; 
+       			$.post("DatabaseServlet", $.param(params), function(responseText) {
        				console.log("calledPOST");
        				if($(responseText) == 'userRegistered'){
      	        			$('#secondMessageDiv').html("<font color='green'>You have been successfully registered. </font>");
@@ -272,7 +286,7 @@
                          <label> Username: </label>
                       </td>
                       <td   style="padding-left:5px;">
-                         <input style="width: 190px" type="text" name="username"  required> 
+                         <input style="width: 190px" type="text" id="loginUsername" name="username"  required> 
                       </td>
                    </tr>
                    <tr>
@@ -280,7 +294,7 @@
                          <label> Password: </label>
                       </td>
                       <td  style="padding-left:5px;" >
-                         <input style="width: 190px" type="text" name="password" required><br/>
+                         <input style="width: 190px" type="text" id="loginPassword" name="password" required><br/>
                       </td>
                    </tr>
                 </table>
@@ -305,7 +319,7 @@
                          <label>First Name: </label>
                       </td>
                       <td   style="padding-left:5px;">
-                         <input style="width: 190px" type="text" name="fname" required> 
+                         <input style="width: 190px" type="text" id="registerfName" name="fname" required> 
                       </td>
                    </tr>
                    <tr>
@@ -313,7 +327,7 @@
                          <label> Last Name: </label>
                       </td>
                       <td  style="padding-left:5px;" >
-                         <input style="width: 190px" type="text" name="lname" required>
+                         <input style="width: 190px" type="text" id="registerlName" name="lname" required>
                       </td>
                    </tr>
                    <tr>
@@ -321,7 +335,7 @@
                          <label> Username: </label>
                       </td>
                       <td  style="padding-left:5px;" >
-                         <input style="width: 190px" type="text" name="username" required>
+                         <input style="width: 190px" type="text" id="registerUsername" name="username" required>
                       </td>
                    </tr>
                    <tr>
@@ -329,7 +343,7 @@
                          <label> Password: </label>
                       </td>
                       <td  style="padding-left:5px;" >
-                         <input style="width: 190px" type="text" name="password" required>
+                         <input style="width: 190px" type="text" id="registerPassword" name="password" required>
                       </td>
                    </tr>
                    <tr>
@@ -337,7 +351,7 @@
                          <label> Email: </label>
                       </td>
                       <td  style="padding-left:5px;" >
-                         <input style="width: 190px" type="text" name="email" required>
+                         <input style="width: 190px" type="text" id="registerEmail" name="email" required>
                       </td>
                    </tr>
                    <tr>
@@ -345,7 +359,7 @@
                          <label>Phone: </label>
                       </td>
                       <td  style="padding-left:5x;" >
-                         <input style="width: 190px" type="text" name="phoneNumber" required>
+                         <input style="width: 190px" type="text" id="registerPhoneNumber" name="phoneNumber" required>
                       </td>
                    </tr>
                 </table>
