@@ -28,8 +28,13 @@ public class DatabaseServlet extends HttpServlet {
 	private Connection databaseConnection = null;
 	private Statement statement = null;
 	private ResultSet databaseResults = null;
+<<<<<<< HEAD
 	private String mySqlUsername = "root";
 	private String mySqlPassword= "Mochidog2017!";
+=======
+	private String mySqlUsername = "";
+	private String mySqlPassword= "";
+>>>>>>> dc734bc76a7e6b8b54fc72da9219b1b2c013fa13
      
 	
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
