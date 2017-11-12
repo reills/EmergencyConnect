@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import objects.*;
 
 /**
@@ -28,20 +30,17 @@ public class DatabaseServlet extends HttpServlet {
 	private Connection databaseConnection = null;
 	private Statement statement = null;
 	private ResultSet databaseResults = null;
-<<<<<<< HEAD
 	private String mySqlUsername = "root";
 	private String mySqlPassword= "Mochidog2017!";
-=======
-	private String mySqlUsername = "";
-	private String mySqlPassword= "";
->>>>>>> dc734bc76a7e6b8b54fc72da9219b1b2c013fa13
-     
+	private String amazonConnection = "jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com/EmergencyConnectStorage"
+			+ "?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false";
 	
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
 	public void establishConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			databaseConnection = DriverManager.getConnection("jdbc:mysql://localhost/EmergencyConnect?user=" + mySqlUsername + "&password=" + mySqlPassword + "useSSL=false"); //uses the last file
+			//databaseConnection = DriverManager.getConnection("jdbc:mysql://localhost/EmergencyConnect?user=" + mySqlUsername + "&password=" + mySqlPassword + "useSSL=false"); //uses the last file
+			databaseConnection = DriverManager.getConnection(amazonConnection);
 			statement = databaseConnection.createStatement();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -58,11 +57,7 @@ public class DatabaseServlet extends HttpServlet {
 			if( enteredUsername != null &&  enteredUsername.length() > 0 ) {
 				databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username='" +  enteredUsername + "'");
 	
-				if (!databaseResults.isBeforeFirst() ) {    
-				    System.out.println("No data"); 
-				    return false;
-				} 
-			
+				
 				if(databaseResults.next()) { // there should only be one row, since usernames are unique. 
 					String databaseSalt = databaseResults.getString("Salt");
 					String databaseHash = databaseResults.getString("Hash");
@@ -70,7 +65,12 @@ public class DatabaseServlet extends HttpServlet {
 					String saltyPassword = databaseSalt + enteredPassword;
 					String tempHash = LoginHash.generateHash( saltyPassword );
 					
+					System.out.println("database: " + databaseHash);
+					System.out.println("tempHash: " + tempHash);
+					
+					
 					if( databaseHash.equals(tempHash)) {
+						System.out.println("they are equal. returnign true");
 						return true;
 					}
 					
@@ -92,11 +92,8 @@ public class DatabaseServlet extends HttpServlet {
 		String enteredPassword = request.getParameter("password");
 		String checkingAccountDetails = request.getParameter("inputType");
 		
-		//System.out.println(enteredUsername);
-		//System.out.println(enteredPassword);
-		//System.out.println(checkingAccountDetails);
-		
 		if( checkingAccountDetails.equals("login") ) {
+			System.out.println("goingToLoginVerfiication");
 			if(  verifyUser( enteredUsername, enteredPassword ) ) {
 				response.getWriter().write("VALID");
 			} 
@@ -113,7 +110,10 @@ public class DatabaseServlet extends HttpServlet {
 	/* Creating all the user objects with all their shit, like name/id etc. 
 	 * These objects are set to an request object so they can be accessed in the jsp if needed */
 	public void loadAllUsers() {
-		allUsers = new ArrayList<User>();
+		
+		if( allUsers == null ) {
+			allUsers = new ArrayList<User>();
+		}
 		 
 		try {
 			databaseResults = statement.executeQuery("SELECT * FROM User");
@@ -144,6 +144,7 @@ public class DatabaseServlet extends HttpServlet {
 	 * */
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
 		
+		loadAllUsers();
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		
@@ -155,29 +156,33 @@ public class DatabaseServlet extends HttpServlet {
 			}catch(IOException ioe){
 				System.out.println(ioe.getMessage());
 			}
-			
 			// All info from registration form. 
-//			String id = request.getParameter("UserID");
+			int userID =0; //databse keeps track of userId's using auto_increment.
 			String fName = request.getParameter("firstName");
 			String lName = request.getParameter("lastName");
 			String email = request.getParameter("email");
 			String fullName = fName + " " + lName;
 			String phoneNumber = request.getParameter("phoneNumber");
-			int userID = Integer.parseInt(id);
 			
+			System.out.println("Attempting to add: firstname: " + fName + ", lastname: " + lName + ", email: " +
+			fullName + ", phoneNumber: " + phoneNumber + ", username: " + enteredUsername + ", password: " + enteredPassword 
+			+ ", UserID: " + userID);
+
 			String userStatus = "Just signed up! ";
 			String salt =  LoginHash.getSalt();
 			String hash =  LoginHash.generateHash(salt + enteredPassword);
 			
-			User tempUser = new User(fullName, enteredUsername, hash, salt, userID, userStatus, phoneNumber, email );
-			allUsers.add(tempUser);
-			
-			try { // add User to the database.
-				statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "'," +  fullName + "'," + enteredUsername + "'," +  userStatus + "'," + 
-						salt + "'," + hash + "'," + email + "'," + phoneNumber + "')");
+			try { // add User to the database (the insert statment returns the ID of newly added element)
+				userID = statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "','" +  fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
+						salt + "','" + hash + "','" + email + "','" + phoneNumber + "')");
+				System.out.println("UserID: " + userID);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
+			User tempUser = new User(fullName, enteredUsername, hash, salt, userID, userStatus, phoneNumber, email );
+			allUsers.add(tempUser);
+			
 		}else{
 			try{
 				response.getWriter().write("userExists");
@@ -191,7 +196,7 @@ public class DatabaseServlet extends HttpServlet {
 	/*
 	 * Given the parameter userID, adds a friend ( based on the parameter friendID) to that Id's friends list
 	 * */
-	public void addUser(int userId, int friendId) {
+	public void addUserFriend(int userId, int friendId) {
 		establishConnection();
 		
 		User temp = getUser( userId);
@@ -201,22 +206,24 @@ public class DatabaseServlet extends HttpServlet {
 		}
 		
 		try {
-			statement.executeUpdate("INSERT INTO Relationship VALUES ( '" + userId + "'," + friendId + "')");
+			statement.executeUpdate("INSERT INTO Relationship VALUES ( '" + userId + "','" + friendId + "')");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 	}
 	
-	/*returns a user from a given id*/
+	/*returns a user from a given id, makes the array list in case this user is first user*/
 	public User getUser(int id) {
 		User temp = null; 
 		
-		for( int i = 0; i < allUsers.size(); i++ ) {
-			if( allUsers.get(i).getUserId() == id) {
-				temp = allUsers.get(i);
+		if( allUsers != null ) {
+			for( int i = 0; i < allUsers.size(); i++ ) {
+				if( allUsers.get(i).getUserId() == id) {
+					temp = allUsers.get(i);
+				}
 			}
-		}
+		} 
 		
 	return temp;
 	}
@@ -225,11 +232,16 @@ public class DatabaseServlet extends HttpServlet {
 	public boolean userExists(String username){
 		boolean userExists = false;
 		User currUser = null;
-		for(int i=0; i<allUsers.size(); i++){
-			currUser = allUsers.get(i);
-			if(currUser.getUsername().equals(username)){
-				userExists = true;
+		
+		if( allUsers != null ) {
+			for(int i=0; i<allUsers.size(); i++){
+				currUser = allUsers.get(i);
+				if(currUser.getUsername().equals(username)){
+					userExists = true;
+				}
 			}
+		} else {
+			allUsers = new ArrayList<User>();
 		}
 		return userExists;
 	}

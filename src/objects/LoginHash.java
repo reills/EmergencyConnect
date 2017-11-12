@@ -1,7 +1,5 @@
 package objects;
 
-import objects.User;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,15 +8,10 @@ import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 
 public class LoginHash  {
-	private static final long serialVersionUID = 1L;
-	
 	/* From a given password and salt, uses the SHA-256 encoding system to return a hashed key
 	 * This key is used to compare to the database key when users log in. 
 	 */
-	public static String generateHash(String password) {
-		
-		String encodedSalt = getSalt();
-		String passwordAndSalt = encodedSalt + password;
+	public static String generateHash(String passwordAndSalt) {
 		
 		 MessageDigest messageDigest = null;
 			try {
