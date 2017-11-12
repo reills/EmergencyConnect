@@ -18,31 +18,6 @@
            alert('ok');
        }
        
-       // Refresh AJAX calls
-       function fetch() {
-           console.log("Fetching news...");
-           // First AJAX request to get news JSON
-        $.ajax({
-          dataType: "json",
-          url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
-          success: function(response) {
-            console.log(response);
-            // Second AJAX request to generate content from news JSON
-            /*
-          $.ajax({
-              dataType: "text",
-              url: "https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
-              success: function(response) {
-                var news = response;
-                console.log(news);
-                $("#jsonContent").html(JSON.stringify(news));
-                
-              }
-            });*/
-          }
-        });
-       }
-       
        function closeLogin() {
         $("#loginButton").hide();
         $("#registerButton").hide();
