@@ -70,13 +70,41 @@
 		}
 
 		function fetchTweets() {
+			// $.ajax({
+			// 	dataType: "json",
+			// 	// Grabs JSON from url
+			// 	url: "https://api.twitter.com/1.1/geo/search.json?lat=" + lat + "&long=" + long,
+			// 	success: function(response) {
+			// 		// "response" is a JSON with the returned data
+			// 		console.log(response);
+			// 	}
+			// });
 			$.ajax({
-				dataType: "json",
+				type: "GET",
 				// Grabs JSON from url
-				url: "https://api.twitter.com/1.1/geo/search.json?lat=" + lat + "&long=" + long,
+				url: "test.php",
 				success: function(response) {
 					// "response" is a JSON with the returned data
 					console.log(response);
+					fetchWeather();
+				}
+			});
+		}
+
+		function fetchWeather() {
+		    var key = "91153d239d63d420";
+	        $.ajax({
+				dataType: "json",
+				// Grabs JSON from url
+				url: "http://api.wunderground.com/api/" + key + "/forecast/geolookup/conditions/q/" + lat + "," + long + ".json",
+				success: function(response) {
+					// "response" is a JSON with the returned data
+					console.log(response);
+					$("#card").html(response.current_observation.temperature_string);
+
+					$("#card").append("<img src=" + response.current_observation.icon_url + ">");
+
+					$("#card").append("<p>" + response.location.city + "</p>");
 				}
 			});
 		}
@@ -88,10 +116,13 @@
 
 	<body>
 
-
+	<?php
+	echo "My first PHP script!";
+	?> 
 
 	<button type="button" onclick='fetchLocation()'>fetch location</button>
-	<button type="button" onclick='fetchTweets()'>fetch twitter</button>
+	<button type="button" onclick='fetchTweets()'>fetch twitter</button>	
+	<button type="button" onclick='fetchWeather()'>fetch weather</button>
 	<h1>Fetched data:</h1>
 	<div id="card">help</div>
 	</body>
