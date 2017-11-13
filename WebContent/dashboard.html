@@ -145,21 +145,6 @@
    						    "</div>" +
    						  "</div>"	         
    						  );
-   				  /*
-   				  $("#NYTNews").append("<div class='card'><div class = 'header'>"
-   						  + "<h4 class ='title'><a href='" + weburl + "'>"
-   						  + JSON.stringify(currentArticle.headline.main)
-   						  + "</a></h4>"
-   						  + "<p class='category'>New York Times</p>"
-   						  + "</div>");
-   				  imgURL = JSON.stringify(currentArticle.multimedia[0].url);
-   				  imgURL = imgURL.slice(1, -1);
-   				  $("#NYTNews").append("<div class='content'><div class = 'articleimage'>" + "<img height='120px' src = 'https://www.nytimes.com/" + imgurl + "'></div>");
-   				  $("#NYTNews").append("<div class = 'articledescription'>" + JSON.stringify(currentArticle.snippet) + "</div></div></div>");
-   				  */
-
-
-            
    			  }
    		  }
    		}).fail(function(err) {
@@ -323,6 +308,9 @@
                    <div class="row">
                       <div class="col-md-12" id="APNews" style="padding-left: 0">
                       </div>
+                      <script type="text/javascript">
+   					    fetchAP();
+					  </script>
                    </div>
                    <div class="row">
                       <div class="col-md-12" style="padding-left: 0">
@@ -343,6 +331,9 @@
                    <div class="row">
                       <div class="col-md-12" id="NYTNews" style="padding-right: 0">
                       </div>
+                      <script type="text/javascript">
+   					    fetchNYT();
+					  </script>
                    </div>
                    <div class="row">
                       <div class="col-md-12" style="padding-right: 0">
