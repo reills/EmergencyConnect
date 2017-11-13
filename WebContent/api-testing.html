@@ -100,7 +100,7 @@
 				success: function(response) {
 					// "response" is a JSON with the returned data
 					console.log(response);
-					$("#card").html(response.current_observation.temperature_string);
+					$("#card").html(response.current_observation.temperature_string + " " + );
 
 					$("#card").append("<img src=" + response.current_observation.icon_url + ">");
 

@@ -102,7 +102,7 @@
         });
       }
     
-       function fetchNYT() {
+      function fetchNYT() {
    		console.log("Fetching news...");
    		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
    		url += '?' + $.param({
@@ -157,16 +157,81 @@
    				  $("#NYTNews").append("<div class='content'><div class = 'articleimage'>" + "<img height='120px' src = 'https://www.nytimes.com/" + imgurl + "'></div>");
    				  $("#NYTNews").append("<div class = 'articledescription'>" + JSON.stringify(currentArticle.snippet) + "</div></div></div>");
    				  */
+
+
+            
    			  }
    		  }
    		}).fail(function(err) {
    		  throw err;
    		});
-         }
+      }
     
       function clean_stringify(input_string) {
           return JSON.stringify(input_string).replace("\\", "").replace("\\", "").replace("\\", "").replace("\\", "");
       }
+
+      function fetchLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getPositon);
+        } else {
+          // Not supported
+        }
+
+      function getPositon(position) {
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
+            $.ajax({
+          dataType: "json",
+          // Grabs JSON from url
+          url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=AIzaSyBybJlDH9Ioc3s3Xi8GagmzxL3D19pU8QM",
+          success: function(response) {
+            // "response" is a JSON with the returned data
+            city = response.results[3].formatted_address;
+            console.log("from Google Reverse Geocoding API, city: " + city);
+          }
+        });
+      }
+    }
+
+    function fetchTweets() {
+      // $.ajax({
+      //  dataType: "json",
+      //  // Grabs JSON from url
+      //  url: "https://api.twitter.com/1.1/geo/search.json?lat=" + lat + "&long=" + long,
+      //  success: function(response) {
+      //    // "response" is a JSON with the returned data
+      //    console.log(response);
+      //  }
+      // });
+      $.ajax({
+        type: "GET",
+        // Grabs JSON from url
+        url: "test.php",
+        success: function(response) {
+          // "response" is a JSON with the returned data
+          console.log(response);
+        }
+      });
+    }
+
+    function fetchWeather() {
+        var key = "91153d239d63d420";
+          $.ajax({
+        dataType: "json",
+        // Grabs JSON from url
+        url: "http://api.wunderground.com/api/" + key + "/forecast/geolookup/conditions/q/" + lat + "," + long + ".json",
+        success: function(response) {
+          // "response" is a JSON with the returned data
+          console.log(response);
+          $("#weatherTemperature").html(response.current_observation.temperature_string);
+
+          $("#weatherImage").html("<img style='margin: 20px' src=" + response.current_observation.icon_url + ">");
+
+          $("#weatherCity").html(response.location.city);
+        }
+      });
+    }
     </script>
   </head>
    
@@ -244,6 +309,10 @@
     <button type="button" onclick='fetchAP()'>fetch AP News</button>
     <button type="button" onclick='fetchNYT()'>fetch NYT News</button>
     <button type="button" onclick='closeLogin()'>close log in</button>
+
+    <button type="button" onclick='fetchLocation()'>fetch location</button>
+    <button type="button" onclick='fetchTweets()'>fetch twitter</button>  
+    <button type="button" onclick='fetchWeather()'>fetch weather</button>
     <div id="jsonContent"></div>
     <div class="content">
        <div class="container-fluid">
@@ -279,10 +348,10 @@
                       <div class="col-md-12" style="padding-right: 0">
                          <div class="card">
                             <div class="header">
-                               <h4 class="title">Title</h4>
-                               <p class="category">Subtitle</p>
+                               <h4 class="title" id="weatherCity">City</h4>
+                               <p class="category" id="weatherTemperature">Temp</p>
                             </div>
-                            <div class="content">
+                            <div id="weatherImage">
                                <!-- Content Here -->
                             </div>
                          </div>
