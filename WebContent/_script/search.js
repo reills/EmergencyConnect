@@ -7,16 +7,16 @@ $("#searchClose").click(function() {
 })
 
 // Open and close register form
-$("#input_img").click(function() {
+$("#search_button").click(function() {
     $("#registerModal").show();
 })
 
 
 //Calls search when user clicks the button
 $(document).ready(function() {
-    $("#input_img").click(function() {
+    $("#search_button").click(function() {
         alert("clicked that search button");
-        searchForUsers();
+        //searchForUsers();
     });
 });
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
 $('#searchbar').keydown(function(e) {
     if (e.keyCode == 13) {
         alert('you pressed enter ^_^');
-        searchForUsers();
+        //searchForUsers();
     }
 });
 
@@ -50,7 +50,8 @@ $('#searchbar').keydown(function(e) {
 //     });
 // }
 
-//live search: as user types a key into the searchbar, makes an ajax call to retrieve results
+//live search: as user types a key into the searchbar, 
+//makes an ajax call to retrieve results if user clicks drop down item, search is called
 $(document).ready(function() {
     $("#searchbar").keyup(function() {
         var params = {
@@ -61,14 +62,15 @@ $(document).ready(function() {
             var availableTags = $.map(responseJson, function(el) {
                 return el;
             });
-            $( "#searchbar" ).autocomplete({ minLength: 0 });
+            
             $("#searchbar").autocomplete({
-                source: availableTags
-            });
+                source: availableTags,
+                select: function(event, ui) {
+                    $("#search_button").click(); }
+            })
         });
-    });
-});
-
+     });
+ });
 
 
 

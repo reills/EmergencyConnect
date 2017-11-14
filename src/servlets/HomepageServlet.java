@@ -61,9 +61,10 @@ public class HomepageServlet extends HttpServlet {
 		String checkingAccountDetails = request.getParameter("inputType");
 		
 		if( checkingAccountDetails.equals("retrieveFriends") ) {
+			String input = request.getParameter("value");
 			
-			ArrayList<String> allUserNames = getSearchTerms();
-			String json = new Gson().toJson(allUserNames);
+			ArrayList<String> allSearchResults = getUserFriends(input);
+			String json = new Gson().toJson(allSearchResults);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);
@@ -84,22 +85,22 @@ public class HomepageServlet extends HttpServlet {
 				}
 			}
 			
-		} else if( checkingAccountDetails.equals("liveSe") ) {
+		} else if( checkingAccountDetails.equals("searchResults") ) {
+			String input = request.getParameter("value");
+			System.out.println("searching for: " + input);
 			
+			ArrayList<String> searchedUsers = getSearchResults( input );
 		}
 		
 	closeSQLObjects();
 	}
 	
-	/*
-	 * Gets all the Username and names in the database and adds them to an array of Strings
-	 * @return
-	 * */
-	public ArrayList<String> getUserFriends( ) {
+	/* Gets all the friends of user in the database and adds them to an array of Strings  */
+	public ArrayList<String> getUserFriends(String value ) {
 		ArrayList<String> searchTerms = new ArrayList<String>();
 		
 		try {
-			databaseResults = statement.executeQuery("SELECT Username, Name FROM User ");
+			databaseResults = statement.executeQuery("SELECT Username, Name From User WHERE field LIKE \"%value%\" ");
 			while( databaseResults.next() ) {
 				String name = databaseResults.getString ("Username");
 				String user = databaseResults.getString ("Name");
@@ -116,7 +117,31 @@ public class HomepageServlet extends HttpServlet {
 		return searchTerms;
 	}
 	
-	public ArrayList<String> getSearchTerms() {
+	/*handles getting the actual search results*/
+	public ArrayList<String> getSearchResults(String value ) {
+		ArrayList<String> searchTerms = new ArrayList<String>();
+		
+		try {
+			databaseResults = statement.executeQuery("SELECT Username, Name From User WHERE field LIKE \"%value%\" ");
+			while( databaseResults.next() ) {
+				String name = databaseResults.getString ("Username");
+				String user = databaseResults.getString ("Name");
+				searchTerms.add(databaseResults.getString ("Username"));
+				searchTerms.add(databaseResults.getString ("Name"));
+				
+				System.out.println("String username: " + user +  " String name: "  + name);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	
+		return searchTerms;
+	}
+	
+	
+	/*just gets all the possible lists of search terms and returns it to the dashboard for jquery call*/
+	public ArrayList<String> getSearchTerms( ) {
 		ArrayList<String> searchTerms = new ArrayList<String>();
 		
 		try {
