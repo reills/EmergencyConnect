@@ -14,11 +14,6 @@
     <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
     
     <script>
-       function codeAddress() {
-           alert('ok');
-       }
-       
-      
     //call database to check
        $(document).ready(function() {
         $("#loginSubmit").click(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
@@ -42,7 +37,7 @@
                 }
               });
         });
-       })
+       });
     
     	//call database to register user
        	$(document).ready(function() {
@@ -71,6 +66,7 @@
        			});
        		});
        	})
+
         function fetchAP() {
         console.log("Fetching news from AP...");
         $.ajax({
@@ -103,53 +99,53 @@
       }
     
       function fetchNYT() {
-   		console.log("Fetching news...");
-   		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-   		url += '?' + $.param({
-   		  'api-key': "888fd10628734e11810b44d6df4480f3",
-   		  'q': "disaster"
-   		});
-   		$.ajax({
-   		  url: url,
-   		  dataType: "json",
-   		  method: 'GET',
-   		}).done(function(response) {
-   		  console.log(response);
-   		  output_element = "#NYTNews"
-   		  articles = response.response.docs;
-   		  for (var i=0; i<articles.length; i++){
-   			  currentArticle = articles[i];
-   			  var webURL, imgURL;
-   			  if(currentArticle.multimedia.length != 0){
-   				  webURL = JSON.stringify(currentArticle.web_url);
-   				  webURL = webURL.substring(1, webURL.length-1);
-   				  imgURL = JSON.stringify(currentArticle.multimedia[0].url);
- 				  imgURL = imgURL.slice(1, -1);
-   				  title = 
-   				  $("#NYTNews").append(
-   						  "<div class='card'>" +
-   						  	"<div class='header'" +
-   						      "<h4 class='title'>" +
-   						        "<a href='" +
-   						          webURL + "'>" +
-   						          JSON.stringify(currentArticle.headline.main) +
-   						        "</a>" +
-   						      "</h4>" +
-   						      "<p class='category'>New York Times</p>" +
-   						    "</div>" +
-   						    "<div class='content'>" +
-   						      "<img height='120px' src='https://www.nytimes.com/" + imgURL + "'>" +
-   						      "<p>" +
-   						        JSON.stringify(currentArticle.snippet) +
-   						      "</p>" +
-   						    "</div>" +
-   						  "</div>"	         
-   						  );
-   			  }
-   		  }
-   		}).fail(function(err) {
-   		  throw err;
-   		});
+     		console.log("Fetching news...");
+     		var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+     		url += '?' + $.param({
+     		  'api-key': "888fd10628734e11810b44d6df4480f3",
+     		  'q': "disaster"
+     		});
+     		$.ajax({
+     		  url: url,
+     		  dataType: "json",
+     		  method: 'GET',
+     		}).done(function(response) {
+     		  console.log(response);
+     		  output_element = "#NYTNews"
+     		  articles = response.response.docs;
+     		  for (var i=0; i<articles.length; i++){
+     			  currentArticle = articles[i];
+     			  var webURL, imgURL;
+     			  if(currentArticle.multimedia.length != 0){
+     				  webURL = JSON.stringify(currentArticle.web_url);
+     				  webURL = webURL.substring(1, webURL.length-1);
+     				  imgURL = JSON.stringify(currentArticle.multimedia[0].url);
+   				  imgURL = imgURL.slice(1, -1);
+     				  title = 
+     				  $("#NYTNews").append(
+     						  "<div class='card'>" +
+     						  	"<div class='header'" +
+     						      "<h4 class='title'>" +
+     						        "<a href='" +
+     						          webURL + "'>" +
+     						          JSON.stringify(currentArticle.headline.main) +
+     						        "</a>" +
+     						      "</h4>" +
+     						      "<p class='category'>New York Times</p>" +
+     						    "</div>" +
+     						    "<div class='content'>" +
+     						      "<img height='120px' src='https://www.nytimes.com/" + imgURL + "'>" +
+     						      "<p>" +
+     						        JSON.stringify(currentArticle.snippet) +
+     						      "</p>" +
+     						    "</div>" +
+     						  "</div>"	         
+     						  );
+     			  }
+     		  }
+     		}).fail(function(err) {
+     		  throw err;
+     		});
       }
     
       function clean_stringify(input_string) {
@@ -159,14 +155,14 @@
       function fetchLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(getPositon);
-        } else {
-          // Not supported
         }
+      }
 
       function getPositon(position) {
           lat = position.coords.latitude;
           long = position.coords.longitude;
-            $.ajax({
+          fetchWeather();
+          $.ajax({
           dataType: "json",
           // Grabs JSON from url
           url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=AIzaSyBybJlDH9Ioc3s3Xi8GagmzxL3D19pU8QM",
@@ -177,28 +173,6 @@
           }
         });
       }
-    }
-
-    function fetchTweets() {
-      // $.ajax({
-      //  dataType: "json",
-      //  // Grabs JSON from url
-      //  url: "https://api.twitter.com/1.1/geo/search.json?lat=" + lat + "&long=" + long,
-      //  success: function(response) {
-      //    // "response" is a JSON with the returned data
-      //    console.log(response);
-      //  }
-      // });
-      $.ajax({
-        type: "GET",
-        // Grabs JSON from url
-        url: "test.php",
-        success: function(response) {
-          // "response" is a JSON with the returned data
-          console.log(response);
-        }
-      });
-    }
 
     function fetchWeather() {
         var key = "91153d239d63d420";
@@ -209,11 +183,11 @@
         success: function(response) {
           // "response" is a JSON with the returned data
           console.log(response);
-          $("#weatherTemperature").html(response.current_observation.temperature_string);
+          temp = response.current_observation.temperature_string;
+          weatherIcon = "<img style='margin: 20px' src=" + response.current_observation.icon_url + ">";
+          weatherCity = response.location.city;
 
-          $("#weatherImage").html("<img style='margin: 20px' src=" + response.current_observation.icon_url + ">");
-
-          $("#weatherCity").html(response.location.city);
+          $("#weatherCard").html("<div class='card'><div class='header'><h4 class='title'>" + weatherCity + "</h4><p class='category'>" + temp + "</p></div><div>" + weatherIcon + "</div></div>");
         }
       });
     }
@@ -245,6 +219,7 @@
           </ul>
        </div>
     </div>
+
     <div class="main-panel">
     <nav class="navbar navbar-default navbar-fixed">
        <div class="container-fluid">
@@ -290,14 +265,13 @@
           </div>
        </div>
     </nav>
-    <!-- reFRESH this page... TEMP -->
-    <button type="button" onclick='fetchAP()'>fetch AP News</button>
-    <button type="button" onclick='fetchNYT()'>fetch NYT News</button>
-    <button type="button" onclick='closeLogin()'>close log in</button>
 
-    <button type="button" onclick='fetchLocation()'>fetch location</button>
-    <button type="button" onclick='fetchTweets()'>fetch twitter</button>  
-    <button type="button" onclick='fetchWeather()'>fetch weather</button>
+    <script type="text/javascript">
+      fetchAP();
+      fetchNYT();
+      fetchLocation();
+    </script>
+
     <div id="jsonContent"></div>
     <div class="content">
        <div class="container-fluid">
@@ -308,44 +282,19 @@
                    <div class="row">
                       <div class="col-md-12" id="APNews" style="padding-left: 0">
                       </div>
-                      <script type="text/javascript">
-   					    fetchAP();
-					  </script>
                    </div>
                    <div class="row">
-                      <div class="col-md-12" style="padding-left: 0">
-                         <div class="card">
-                            <div class="header">
-                               <h4 class="title">Title</h4>
-                               <p class="category">Subtitle</p>
-                            </div>
-                            <div class="content">
-                               <!-- Content Here -->
-                            </div>
-                         </div>
-                      </div>
+                      <div class="col-md-12" id="NYTNews" style="padding-left: 0"></div>
                    </div>
                 </div>
                 <!-- Second column -->
                 <div class="col-md-6">
                    <div class="row">
-                      <div class="col-md-12" id="NYTNews" style="padding-right: 0">
-                      </div>
-                      <script type="text/javascript">
-   					    fetchNYT();
-					  </script>
+                      <!-- Hello -->
                    </div>
                    <div class="row">
-                      <div class="col-md-12" style="padding-right: 0">
-                         <div class="card">
-                            <div class="header">
-                               <h4 class="title" id="weatherCity">City</h4>
-                               <p class="category" id="weatherTemperature">Temp</p>
-                            </div>
-                            <div id="weatherImage">
-                               <!-- Content Here -->
-                            </div>
-                         </div>
+                      <div class="col-md-12" id="weatherCard" style="padding-right: 0">
+                         
                       </div>
                    </div>
                 </div>
@@ -368,11 +317,8 @@
                       </div>
                       <div class="content">
                          <!-- Content Here -->
-                         <script> 
-                            for (i = 0; i < 4; i++) {
-                              document.write("<h1>Oh no</h1>");
-                              }
-                         </script>
+                         <p>YEah!</p>
+                         <p>Content placeholder!</p>
                       </div>
                    </div>
                 </div>
@@ -380,6 +326,7 @@
           </div>
        </div>
     </div>
+
     <div id="loginModal" class="modal">
        <!-- Modal content -->
        <div class="login-modal">
