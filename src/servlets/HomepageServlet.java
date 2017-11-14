@@ -48,7 +48,7 @@ public class HomepageServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		allUsers = databaseInstance.getAllUsers();
+		//allUsers = databaseInstance.getAllUsers(); This needs to be done once a user logsin or registers.
 	}
 	
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
@@ -68,10 +68,25 @@ public class HomepageServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);
 			
-		} else if( checkingAccountDetails.equals("search"))   {
+		} else if( checkingAccountDetails.equals("liveSearch"))   {
+			System.out.println("calling live search");
+			String input = request.getParameter("value");
 			
-		
-		} 
+			if( !input.equals("") ) {
+				System.out.println("searching for: " + input);
+				ArrayList<String> allUserNames = getSearchTerms();
+				
+				if( !allUserNames.isEmpty() ) {
+					String json = new Gson().toJson(allUserNames);
+					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
+					response.getWriter().write(json);
+				}
+			}
+			
+		} else if( checkingAccountDetails.equals("liveSe") ) {
+			
+		}
 		
 	closeSQLObjects();
 	}
@@ -80,14 +95,40 @@ public class HomepageServlet extends HttpServlet {
 	 * Gets all the Username and names in the database and adds them to an array of Strings
 	 * @return
 	 * */
+	public ArrayList<String> getUserFriends( ) {
+		ArrayList<String> searchTerms = new ArrayList<String>();
+		
+		try {
+			databaseResults = statement.executeQuery("SELECT Username, Name FROM User ");
+			while( databaseResults.next() ) {
+				String name = databaseResults.getString ("Username");
+				String user = databaseResults.getString ("Name");
+				searchTerms.add(databaseResults.getString ("Username"));
+				searchTerms.add(databaseResults.getString ("Name"));
+				
+				System.out.println("String username: " + user +  " String name: "  + name);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+	
+		return searchTerms;
+	}
+	
 	public ArrayList<String> getSearchTerms() {
 		ArrayList<String> searchTerms = new ArrayList<String>();
 		
 		try {
 			databaseResults = statement.executeQuery("SELECT Username, Name FROM User ");
 			while( databaseResults.next() ) {
-				searchTerms.add(databaseResults.getString ("UserId"));
+				String name = databaseResults.getString ("Username");
+				String user = databaseResults.getString ("Name");
+				searchTerms.add(databaseResults.getString ("Username"));
 				searchTerms.add(databaseResults.getString ("Name"));
+				
+
+				System.out.println("String username: " + name +  " String name: "  + user);
 			}
 		} catch (SQLException e) {
 			
