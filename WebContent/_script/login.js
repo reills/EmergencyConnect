@@ -4,7 +4,7 @@
 
 // Open and close login form
  $("#loginButton").click(function() {
-          $("#loginModal").show();
+         $("#loginModal").show();
       })
       $("#loginClose").click(function() {
           $("#loginModal").hide();
@@ -34,8 +34,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                userName = username; // this is setting the global variable
-                getUsers(userName);
+                getUsersFriends(username);
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
                 console.log("false");
@@ -64,8 +63,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                userName = username; // this is the global variable
-                getUsers(userName);
+                getUsers(username);
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
                 console.log("fail");
