@@ -28,8 +28,40 @@ img {
 	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+
+
+/* ======== SEARCH BAR ========= */
+
+#input_img {
+    position:absolute;
+    bottom:-10px;
+    right: 5px;
+    width: 59px;
+    height:59px;
+}
+
+#liveResults {
+	width:400px;
+	height:300px;
+	border: 1px solid grey;
+	display:none;
+}
+#liveResults a{
+	display:block;
+	width:98%;
+	padding:1%;
+	font-size:20px;
+	border-bottom:1px solid grey;
+}
+
+
+/* ======== SEARCH BAR ========= */
+
+
+
+
 /* Modal Content */
-.login-modal, .register-modal  {
+.login-modal, .register-modal, .friends-modal  {
 	position: relative;
 	z-index: 1;
 	background: #FFFFFF;

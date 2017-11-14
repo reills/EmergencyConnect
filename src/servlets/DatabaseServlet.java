@@ -84,9 +84,9 @@ public class DatabaseServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
-		establishConnection();
 		
-		System.out.println("===========called doPost==========");
+		establishConnection();
+		System.out.println("===========called DatabaseServlet==========");
 		
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
@@ -100,6 +100,9 @@ public class DatabaseServlet extends HttpServlet {
 			else { 
 				response.getWriter().write("FAILURE");
 			}
+		} else if( checkingAccountDetails.equals("search"))   {
+			
+		
 		} else if ( checkingAccountDetails.equals("register") ) {
 			registerUser(request, response); 
 		}
@@ -244,6 +247,15 @@ public class DatabaseServlet extends HttpServlet {
 			allUsers = new ArrayList<User>();
 		}
 		return userExists;
+	}
+	
+	// getters and setters!
+	public ArrayList<User> getAllUsers() {
+		return allUsers;
+	}
+
+	public void setAllUsers(ArrayList<User> allUsers) {
+		this.allUsers = allUsers;
 	}
 	
 	/*
