@@ -34,7 +34,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                getUsersFriends(username);
+                //TODO:::::: getUsersFriends(username);
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
                 console.log("false");
@@ -63,7 +63,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                getUsers(username);
+                //TODO:::::: getUsersFriends(username);
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
                 console.log("fail");
