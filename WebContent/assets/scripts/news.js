@@ -2,45 +2,48 @@
  * All the javascript and jQuery for News API
  */
 
+const news_api_key = "4a4f44aaabb84ddb9f8523e725b22757";
+const nyt_api_key = "888fd10628734e11810b44d6df4480f3";
+
+const ap_news_element = "#APNews";
+const nyt_news_element = "#NYTNews";
+
 function fetchAP() {
-    console.log("Fetching news from AP...");
+    console.log("Fetching news from Associated Press...");
     $.ajax({
         dataType: "json",
-        // Grabs JSON from url
-        url: "https://newsapi.org/v1/articles?source=associated-press&sortBy=top&apiKey=4a4f44aaabb84ddb9f8523e725b22757",
+        url: "https://newsapi.org/v1/articles?source=associated-press&sortBy=top&apiKey=" + news_api_key,
         success: function(response) {
-            // "response" is a JSON with the returned data
             console.log(response);
-            output_element = "#APNews";
-            $(output_element).html("");
-            // "articles" is an array of articles
+            $(ap_news_element).html("");
+
             articles = response.articles;
             for (var i = 0; i < articles.length; i++) {
                 currentArticle = articles[i];
-                img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
                 title = JSON.stringify(currentArticle.title);
                 url = JSON.stringify(currentArticle.url);
-                description = "<p>" + clean_stringify(currentArticle.description) + "</p>";
-                $(output_element).append("<div class='card'>" + "<div class='header'>" + "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + "<p class='category'>Associated Press</p>" + "</div>" + "<div class='content'>" + img + description + "</div>" + "</div>");
+                img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
+                description = clean_stringify(currentArticle.description);
+                $(ap_news_element).append("<div class='card'>" + "<div class='header'>" + "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + "<p class='category'>Associated Press</p>" + "</div>" + "<div class='content'>" + img + "<p>" + description + "</p></div>" + "</div>");
             }
         }
     });
 }
 
 function fetchNYT() {
-    console.log("Fetching news...");
+    console.log("Fetching news from New York Times...");
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
-        'api-key': "888fd10628734e11810b44d6df4480f3",
+        'api-key': nyt_api_key,
         'q': "disaster"
     });
+
     $.ajax({
         url: url,
         dataType: "json",
         method: 'GET',
     }).done(function(response) {
         console.log(response);
-        output_element = "#NYTNews"
         articles = response.response.docs;
         for (var i = 0; i < articles.length; i++) {
             currentArticle = articles[i];
@@ -51,9 +54,9 @@ function fetchNYT() {
                 imgURL = JSON.stringify(currentArticle.multimedia[0].url);
                 imgURL = imgURL.slice(1, -1);
                 title =
-                    $("#NYTNews").append(
+                    $(nyt_news_element).append(
                         "<div class='card'>" +
-                        "<div class='header'" +
+                        "<div class='header'>" +
                         "<h4 class='title'>" +
                         "<a href='" +
                         webURL + "'>" +
