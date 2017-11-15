@@ -24,7 +24,17 @@ function fetchAP() {
                 url = JSON.stringify(currentArticle.url);
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
                 description = clean_stringify(currentArticle.description);
-                $(ap_news_element).append("<div class='card'>" + "<div class='header'>" + "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + "<p class='category'>Associated Press</p>" + "</div>" + "<div class='content'>" + img + "<p>" + description + "</p></div>" + "</div>");
+                $(ap_news_element).append(
+                    "<div class='card'>" + 
+                        "<div class='header'>" + 
+                            "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + 
+                            "<p class='category'>Associated Press</p>" + 
+                        "</div>" + 
+                        "<div class='content'>" + 
+                            img + 
+                            "<p>" + description + "</p>" + 
+                        "</div>" + 
+                    "</div>");
             }
         }
     });
@@ -56,21 +66,14 @@ function fetchNYT() {
                 title =
                     $(nyt_news_element).append(
                         "<div class='card'>" +
-                        "<div class='header'>" +
-                        "<h4 class='title'>" +
-                        "<a href='" +
-                        webURL + "'>" +
-                        JSON.stringify(currentArticle.headline.main) +
-                        "</a>" +
-                        "</h4>" +
-                        "<p class='category'>New York Times</p>" +
-                        "</div>" +
-                        "<div class='content'>" +
-                        "<img height='120px' src='https://www.nytimes.com/" + imgURL + "'>" +
-                        "<p>" +
-                        JSON.stringify(currentArticle.snippet) +
-                        "</p>" +
-                        "</div>" +
+                            "<div class='header'>" +
+                                "<h4 class='title'>" +
+                                "<a href='" + webURL + "'>" + JSON.stringify(currentArticle.headline.main) + "</a>" +
+                                "</h4>" + "<p class='category'>New York Times</p>" + "</div>" +
+                                "<div class='content'>" +
+                                    "<img height='120px' src='https://www.nytimes.com/" + imgURL + "'>" +
+                                    "<p>" + JSON.stringify(currentArticle.snippet) + "</p>" +
+                            "</div>" +
                         "</div>"
                     );
             }
@@ -81,5 +84,5 @@ function fetchNYT() {
 }
 
 function clean_stringify(input_string) {
-    return JSON.stringify(input_string).replace("\\", "").replace("\\", "").replace("\\", "").replace("\\", "");
+    return JSON.stringify(input_string).replace(/\\/g, "");
 }
