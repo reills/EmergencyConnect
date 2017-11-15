@@ -1,9 +1,6 @@
 /**
- * All the javascript and jquery for news Api
+ * All the javascript and jQuery for News API
  */
-function codeAddress() {
-    alert('ok');
-}
 
 function fetchAP() {
     console.log("Fetching news from AP...");
@@ -82,27 +79,4 @@ function fetchNYT() {
 
 function clean_stringify(input_string) {
     return JSON.stringify(input_string).replace("\\", "").replace("\\", "").replace("\\", "").replace("\\", "");
-}
-
-
-
-function fetchTweets() {
-    // $.ajax({
-    //  dataType: "json",
-    //  // Grabs JSON from url
-    //  url: "https://api.twitter.com/1.1/geo/search.json?lat=" + lat + "&long=" + long,
-    //  success: function(response) {
-    //    // "response" is a JSON with the returned data
-    //    console.log(response);
-    //  }
-    // });
-    $.ajax({
-        type: "GET",
-        // Grabs JSON from url
-        url: "test.php",
-        success: function(response) {
-            // "response" is a JSON with the returned data
-            console.log(response);
-        }
-    });
 }

@@ -1,43 +1,46 @@
  /**
   *  for Geopoints and weather
   */
- function fetchLocation() {
-     if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition(getPositon);
-     } else {
-         // Not supported
-     }
 
-     function getPositon(position) {
-         lat = position.coords.latitude;
-         long = position.coords.longitude;
-         $.ajax({
-             dataType: "json",
-             // Grabs JSON from url
-             url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=AIzaSyBybJlDH9Ioc3s3Xi8GagmzxL3D19pU8QM",
-             success: function(response) {
-                 // "response" is a JSON with the returned data
-                 city = response.results[3].formatted_address;
-                 console.log("from Google Reverse Geocoding API, city: " + city);
-             }
-         });
-     }
- }
+const google_key = "AIzaSyBybJlDH9Ioc3s3Xi8GagmzxL3D19pU8QM";
+const wunderground_key = "91153d239d63d420";
+var lat = 0;
+var long = 0;
+var city = "Flavortown";
 
- function fetchWeather() {
-     var key = "91153d239d63d420";
-     $.ajax({
-         dataType: "json",
-         // Grabs JSON from url
-         url: "http://api.wunderground.com/api/" + key + "/forecast/geolookup/conditions/q/" + lat + "," + long + ".json",
-         success: function(response) {
-             // "response" is a JSON with the returned data
-             console.log(response);
-             $("#weatherTemperature").html(response.current_observation.temperature_string);
+function fetchLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(fetchLocationServices);
+    } else {
+        // Not supported
+    }
+}
 
-             $("#weatherImage").html("<img style='margin: 20px' src=" + response.current_observation.icon_url + ">");
+function fetchLocationServices(position) {
+    lat = position.coords.latitude;
+    long = position.coords.longitude;
+    fetchWeather();
 
-             $("#weatherCity").html(response.location.city);
-         }
-     });
- }
+    $.ajax({
+        dataType: "json",
+        url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=" + google_key,
+        success: function(response) {
+            city = response.results[3].formatted_address;
+            console.log("Google Reverse Geocoding API, city: " + city);
+        }
+    });
+}
+
+function fetchWeather() {
+    $.ajax({
+        dataType: "json",
+        url: "http://api.wunderground.com/api/" + wunderground_key + "/forecast/geolookup/conditions/q/" + lat + "," + long + ".json",
+        success: function(response) {
+            console.log("Wunderground API, weather conditions: " + response);
+            weatherCity = response.location.city;
+            temp = response.current_observation.temperature_string;
+            weatherIcon = "<img style='margin: 20px' src=" + response.current_observation.icon_url + ">";
+            $("#weatherCard").html("<div class='card'><div class='header'><h4 class='title'>" + weatherCity + "</h4><p class='category'>" + temp + "</p></div><div>" + weatherIcon + "</div></div>");
+        }
+    });
+}

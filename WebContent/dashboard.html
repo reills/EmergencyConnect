@@ -5,24 +5,30 @@
       <link rel="icon" type="image/png" href="assets/img/favicon.ico">
       <title>EmergencyConnect</title>
       <!-- CSS -->
-      <link rel="stylesheet" type="text/css" href="assets/css/master.css">
+      <link rel="stylesheet" href="assets/css/master.css">
       <link href="assets/css/bootstrap.min.css" rel="stylesheet">
       <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet">
       <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-      <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+      <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300" rel="stylesheet">
       <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet">
+      <link href="assets/css/jquery-ui.css" rel="stylesheet">
       
       <script src="assets/js/jquery-1.10.2.js"></script>
-      <link href ="assets/css/jquery-ui.css" rel="stylesheet"> 
       <script src="assets/js/jquery-ui.js"></script>
       
       <script src="http://code.jquery.com/jquery-3.2.0.min.js"></script>
       <script src="_script/newsapi.js" type="text/javascript"></script>
       <script src="_script/geopoints.js" type="text/javascript"></script>
       
-   
  </head>
    <body>
+
+      <script type="text/javascript">
+         fetchAP();
+         fetchNYT();
+         fetchLocation();
+      </script>
+
       <div class="wrapper">
       <div class="sidebar" data-color="red" data-image="assets/img/sidebar-5.jpg">
          <div class="sidebar-wrapper">
@@ -33,16 +39,10 @@
             </div>
             <ul class="nav">
                <li class="active">
-                  <a href="dashboard.html">
-                     <i class="pe-7s-graph"></i>
-                     <p>Dashboard</p>
-                  </a>
+                  <a href="dashboard.html"><i class="pe-7s-graph"></i><p>Dashboard</p></a>
                </li>
                <li class="inactive">
-                  <a href="about.html">
-                     <i class="pe-7s-info"></i>
-                     <p>About</p>
-                  </a>
+                  <a href="about.html"><i class="pe-7s-info"></i><p>About</p></a>
                </li>
             </ul>
          </div>
@@ -92,94 +92,59 @@
                </div>
             </div>
          </nav>
-         <!-- reFRESH this page... TEMP -->
-         <button type="button" onclick='fetchAP()'>fetch AP News</button>
-         <button type="button" onclick='fetchNYT()'>fetch NYT News</button>
-         <button type="button" onclick='fetchLocation()'>fetch location</button>
-         <button type="button" onclick='fetchTweets()'>fetch twitter</button>  
-         <button type="button" onclick='fetchWeather()'>fetch weather</button>
-         <div id="jsonContent"></div>
-         <div class="content">
-            <div class="container-fluid">
-               <div class="row">
-                  <div class="col-md-8">
-                     <!-- First column -->
-                     <div class="col-md-6">
+
+    <div class="content">
+       <div class="container-fluid">
+          <div class="row">
+             <div class="col-md-8">
+                <!-- First column -->
+                <div class="col-md-6">
+                   <div class="row">
+                      <div class="col-md-12" id="APNews" style="padding-left: 0"></div>
+                   </div>
+                   <div class="row">
+                      <div class="col-md-12" id="NYTNews" style="padding-left: 0"></div>
+                   </div>
+                </div>
+                <!-- Second column -->
+                <div class="col-md-6">
+                   <div class="row">
+                      <div class="col-md-12" id="weatherCard" style="padding-right: 0"></div>
+                   </div>
+                   <div class="row">
+                   </div>
+                </div>
+             </div>
+            <!-- Search -->
+            <div class="col-md-4" >
+               <div class="card">
+                  <div class="header">
+                  	  <h2> Search for Friends </h2>
+                 </div>
+                  <div class="container-fluid">
+      <!--Search BAR --> 
                         <div class="row">
-                           <div class="col-md-12" id="APNews" style="padding-left: 0">
-                           </div>
-                           <script type="text/javascript">
-                              fetchAP();
-                           </script>
-                        </div>
-                        <div class="row">
-                           <div class="col-md-12" style="padding-left: 0">
-                              <div class="card">
-                                 <div class="header">
-                                    <h4 class="title">Title</h4>
-                                    <p class="category">Subtitle</p>
-                                 </div>
-                                 <div class="content">
-                                    <!-- Content Here -->
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Second column -->
-                     <div class="col-md-6">
-                        <div class="row">
-                           <div class="col-md-12" id="NYTNews" style="padding-right: 0">
-                           </div>
-                           <script type="text/javascript">
-                              fetchNYT();
-                           </script>
-                        </div>
-                        <div class="row">
-                           <div class="col-md-12" style="padding-right: 0">
-                              <div class="card">
-                                 <div class="header">
-                                    <h4 class="title" id="weatherCity">City</h4>
-                                    <p class="category" id="weatherTemperature">Temp</p>
-                                 </div>
-                                 <div id="weatherImage">
-                                    <!-- Content Here -->
-                                 </div>
-                              </div>
+                           <div class="form" >
+                              <div class="col-md-12" style="margin-bottom:0" >
+                                 <input type="text" id="searchbar" class="form-control" placeholder="Search..." value="">
+                                 <img src="assets/img/red_search_img.png" id="search_button">
+                                 <!--SEARCH results!--> 
+                              </div> 
                            </div>
                         </div>
-                     </div>
-                  </div>
-                  <!-- Search -->
-                  <div class="col-md-4" >
-                     <div class="card">
-                        <div class="header">
-                        	  <h2> Search for Friends </h2>
-                       </div>
-                        <div class="container-fluid">
-            <!--Search BAR --> 
-                              <div class="row">
-                                 <div class="form" >
-                                    <div class="col-md-12" style="margin-bottom:0" >
-                                       <input type="text" id="searchbar" class="form-control" placeholder="Search..." value="">
-                                       <img src="assets/img/red_search_img.png" id="search_button">
-                                       <!--SEARCH results!--> 
-                                    </div> 
-                                 </div>
-           <!--SEARCH BAR!--> 
-                              </div>
-                              <div class="row">
-                                 <h4 style="margin: 20px 10px 0px 15px"> Your Friends </h4> <hr style="width: 90%" style="margin: 10px"/>
-                        			<div id="friendsList" style="margin: 20px 10px 40px 15px">
-           <!--friends list!-->    
-                        			</div>
-                        		</div>
+                        <div class="row">
+                           <h4 style="margin: 20px 10px 0px 15px"> Your Friends </h4> <hr style="width: 90%" style="margin: 10px"/>
+                  			<div id="friendsList" style="margin: 20px 10px 40px 15px">
+     <!--friends list!-->    
+                  			</div>
+                  		</div>
                      </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
+
       <div id="loginModal" class="modal">
          <!-- Modal content -->
          <div class="login-modal">
@@ -288,7 +253,9 @@
             </div>
          </div>
       </div>
+
    </body>
+
    <!--   Core JS Files   -->
    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
    <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
@@ -298,10 +265,8 @@
 
 
    <!-- local scripts stored here -->
-      	<script src="_script/login.js" type="text/javascript"></script>
-     	<script src="_script/search.js" type="text/javascript"></script>
-     	
-      <!-- local scripts stored here-->
+   <script src="_script/login.js" type="text/javascript"></script>
+  	<script src="_script/search.js" type="text/javascript"></script>
    
 </html>
 
