@@ -203,10 +203,12 @@ public class DatabaseServlet extends HttpServlet {
 			String hash =  LoginHash.generateHash(salt + enteredPassword);
 			
 			 // add User to the database (the insert statement returns the ID of newly added element)
-			try {
-				userID = statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "','" +  fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
-						salt + "','" + hash + "','" + email + "','" + phoneNumber + "')");
-				System.out.println("UserID: " + userID);
+			try { 
+				statement.executeUpdate("INSERT INTO User (Name, Username, UserStatus, Salt, Hash, Email, PhoneNumber ) VALUES ( '" + fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
+						salt + "','" + hash + "','" + email + "','" + phoneNumber + "')", Statement.RETURN_GENERATED_KEYS);
+				ResultSet rs = statement.getGeneratedKeys();
+				rs.next();
+				userID = rs.getInt(1);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
