@@ -8,15 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 import objects.*;
 
@@ -26,20 +25,21 @@ import objects.*;
 @WebServlet("/DatabaseServlet")
 public class DatabaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<User> allUsers = null;
+	//private ArrayList<User> allUsers = null;
 	private Connection databaseConnection = null;
 	private Statement statement = null;
 	private ResultSet databaseResults = null;
-	private String mySqlUsername = "root";
-	private String mySqlPassword= "Mochidog2017!";
 	private String amazonConnection = "jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com/EmergencyConnectStorage"
 			+ "?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false";
+	private HashMap<String, User > usernameMap = new HashMap<String, User>();
+	private HashMap<Integer, User > userIdMap = new HashMap<Integer, User>();
+	private HashMap<Integer, List<Integer> > friendsList = new HashMap< Integer, List<Integer> >();
+	
 	
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
 	public void establishConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			//databaseConnection = DriverManager.getConnection("jdbc:mysql://localhost/EmergencyConnect?user=" + mySqlUsername + "&password=" + mySqlPassword + "useSSL=false"); //uses the last file
 			databaseConnection = DriverManager.getConnection(amazonConnection);
 			statement = databaseConnection.createStatement();
 		} catch (ClassNotFoundException e) {
@@ -57,7 +57,6 @@ public class DatabaseServlet extends HttpServlet {
 			if( enteredUsername != null &&  enteredUsername.length() > 0 ) {
 				databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username='" +  enteredUsername + "'");
 	
-				
 				if(databaseResults.next()) { // there should only be one row, since usernames are unique. 
 					String databaseSalt = databaseResults.getString("Salt");
 					String databaseHash = databaseResults.getString("Hash");
@@ -71,6 +70,7 @@ public class DatabaseServlet extends HttpServlet {
 					
 					if( databaseHash.equals(tempHash)) {
 						System.out.println("they are equal. returnign true");
+						loadAllUsers();
 						return true;
 					}
 					
@@ -100,9 +100,6 @@ public class DatabaseServlet extends HttpServlet {
 			else { 
 				response.getWriter().write("FAILURE");
 			}
-		} else if( checkingAccountDetails.equals("search"))   {
-			
-		
 		} else if ( checkingAccountDetails.equals("register") ) {
 			registerUser(request, response); 
 		}
@@ -114,10 +111,6 @@ public class DatabaseServlet extends HttpServlet {
 	 * These objects are set to an request object so they can be accessed in the jsp if needed */
 	public void loadAllUsers() {
 		
-		if( allUsers == null ) {
-			allUsers = new ArrayList<User>();
-		}
-		 
 		try {
 			databaseResults = statement.executeQuery("SELECT * FROM User");
 			
@@ -133,7 +126,9 @@ public class DatabaseServlet extends HttpServlet {
 				String phoneNumber = databaseResults.getString("PhoneNumber");
 				
 				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
-				allUsers.add(tempUser);
+				
+				usernameMap.put(username, tempUser);
+				userIdMap.put(userID, tempUser);
 			}
 			
 		} catch (SQLException e) {
@@ -142,16 +137,48 @@ public class DatabaseServlet extends HttpServlet {
 		}
 	}
 	
+	//put all the user's friends into a list, and assign it to the userID, in the friendList map
+	public void getAllFriends() {
+		try {
+			databaseResults = statement.executeQuery("SELECT * FROM Relationship");
+			
+			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
+				int userID = databaseResults.getInt("User_One_ID");
+				int friendID = databaseResults.getInt("User_Two_ID");
+				
+				if( friendsList.containsKey( userID )) { //if user has a key already
+					friendsList.get(userID).add(friendID);
+				} else {
+					List<Integer> usersFriends = new ArrayList<Integer>();
+					usersFriends.add(friendID);
+					friendsList.put(userID, usersFriends);
+				}
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/* returns whether or not userID has added friendID as a a friend */
+	public boolean friendAlreadyExists( int userID, int friendID) {
+		if( friendsList.get(userID).contains(friendID )) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/* Creates all the user information using the servlet request objects. 
-	 * 
 	 * */
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		loadAllUsers();
+		
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		
-		//check if the username already exists
 		if(!userExists(enteredUsername)){
 			
 			try{
@@ -175,7 +202,8 @@ public class DatabaseServlet extends HttpServlet {
 			String salt =  LoginHash.getSalt();
 			String hash =  LoginHash.generateHash(salt + enteredPassword);
 			
-			try { // add User to the database (the insert statment returns the ID of newly added element)
+			 // add User to the database (the insert statement returns the ID of newly added element)
+			try {
 				userID = statement.executeUpdate("INSERT INTO User VALUES ( '" + userID + "','" +  fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
 						salt + "','" + hash + "','" + email + "','" + phoneNumber + "')");
 				System.out.println("UserID: " + userID);
@@ -184,8 +212,8 @@ public class DatabaseServlet extends HttpServlet {
 			}
 			
 			User tempUser = new User(fullName, enteredUsername, hash, salt, userID, userStatus, phoneNumber, email );
-			allUsers.add(tempUser);
-			
+			usernameMap.put(enteredUsername, tempUser);
+			userIdMap.put(userID, tempUser);
 		}else{
 			try{
 				response.getWriter().write("userExists");
@@ -216,51 +244,48 @@ public class DatabaseServlet extends HttpServlet {
 		
 	}
 	
-	/*returns a user from a given id, makes the array list in case this user is first user*/
+	/*returns a user from a given id, returns null if id is not found */
 	public User getUser(int id) {
-		User temp = null; 
-		
-		if( allUsers != null ) {
-			for( int i = 0; i < allUsers.size(); i++ ) {
-				if( allUsers.get(i).getUserId() == id) {
-					temp = allUsers.get(i);
-				}
-			}
-		} 
-		
-	return temp;
+		return userIdMap.get(id);
 	}
 	
-	/*Check if user exists*/
-	public boolean userExists(String username){
-		boolean userExists = false;
-		User currUser = null;
+	/*returns a user with a given username, returns null if id is not found */
+	public User getUser(String username) {
+		return usernameMap.get(username);
+	}
+	
+	/*returns an Id for a given userName, if not found- > returns null */
+	public int getUserID( String username ) { 
 		
-		if( allUsers != null ) {
-			for(int i=0; i<allUsers.size(); i++){
-				currUser = allUsers.get(i);
-				if(currUser.getUsername().equals(username)){
-					userExists = true;
-				}
-			}
-		} else {
-			allUsers = new ArrayList<User>();
+		User tempUser = usernameMap.get(username);
+		
+		if( tempUser != null ) {
+			return tempUser.getUserId();
 		}
-		return userExists;
+		
+		return 0;
 	}
 	
-	// getters and setters!
-	public ArrayList<User> getAllUsers() {
-		return allUsers;
+	/*Check if user exists returns true, if the username is already in the database, false otherwise */
+	public boolean userExists(String username){
+		if(usernameMap.containsKey(username) ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/*Getters for the User containers. */
+	public HashMap<String, User> getUsernameMap() {
+		return usernameMap;
 	}
 
-	public void setAllUsers(ArrayList<User> allUsers) {
-		this.allUsers = allUsers;
+	public HashMap<Integer, User> getUserIdMap() {
+		return userIdMap;
 	}
 	
-	/*
-	 * Close all the SQL objects!!
-	 * */
+	/* Close all the SQL objects!!*/
 	public void closeSQLObjects() {
 		try { 
 			
