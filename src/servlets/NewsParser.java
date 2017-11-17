@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import objects.Article;
-import objects.News;
 
 /**
  * Servlet implementation class NewsParser
