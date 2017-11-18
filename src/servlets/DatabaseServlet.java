@@ -120,9 +120,10 @@ public class DatabaseServlet extends HttpServlet {
 	public void loadAllUsers() {
 		
 		try {
-			if(statement == null) {
+//			if(statement == null) {
 				establishConnection();
-			}
+				System.out.println("statement is null in load all users");
+//			}
 			databaseResults = statement.executeQuery("SELECT * FROM User");
 			
 			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next

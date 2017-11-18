@@ -57,25 +57,25 @@ $('#searchbar').keydown(function(e) {
 
 //live search: as user types a key into the searchbar, 
 //makes an ajax call to retrieve results if user clicks drop down item, search is called
-$(document).ready(function() {
-    $("#searchbar").keyup(function() {
-        var params = {
-            inputType: "liveSearch",
-            value: $("#searchbar").val()
-        };
-        $.post("HomepageServlet", $.param(params), function(responseJson) {
-            var availableTags = $.map(responseJson, function(el) {
-                return el;
-            });
-            
-            $("#searchbar").autocomplete({
-                source: availableTags,
-                select: function(event, ui) {
-                    $("#search_button").click(); }
-            })
-        });
-     });
- });
+//$(document).ready(function() {
+//    $("#searchbar").keyup(function() {
+//        var params = {
+//            inputType: "liveSearch",
+//            value: $("#searchbar").val()
+//        };
+//        $.post("HomepageServlet", $.param(params), function(responseJson) {
+//            var availableTags = $.map(responseJson, function(el) {
+//                return el;
+//            });
+//            
+//            $("#searchbar").autocomplete({
+//                source: availableTags,
+//                select: function(event, ui) {
+//                    $("#search_button").click(); }
+//            })
+//        });
+//     });
+// });
 
 
 

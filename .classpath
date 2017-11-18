@@ -8,11 +8,17 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="gson2.8.0.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/thomaszhang/Desktop/EmergencyConnect/mysql-connector-java-5.1.40-bin.jar"/>
+	<classpathentry kind="lib" path="/Users/thomaszhang/Downloads/javax.servlet-api-3.0.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
