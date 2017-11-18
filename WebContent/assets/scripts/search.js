@@ -15,40 +15,45 @@ $("#search_button").click(function() {
 //Calls search when user clicks the button
 $(document).ready(function() {
     $("#search_button").click(function() {
+    	console.log("clicked search");
         alert("clicked that search button");
-        //searchForUsers();
+        searchForUsers();
     });
 });
 
 //Calls search when user hits enter
 $('#searchbar').keydown(function(e) {
     if (e.keyCode == 13) {
+        console.log("clicked search");
         alert('you pressed enter ^_^');
-        //searchForUsers();
+        searchForUsers();
     }
 });
 
-// function searchForUsers() {
-//     var params = {
-//    		 	searchInput: $('#searchbar').val(),
-//             inputType: "search"
-//     };
-//     console.log("searching for: " + searchInput);
-//     
-//     $.post("HomepageServlet", $.param(params), function(responseText) {
-//         console.log("calledPOST");
-//         if (responseText == 'userRegistered') {
-//             $("#loginButton").hide();
-//             $("#registerModal").hide();
-//             $("#registerButton").hide();
-//             $("#accountButton").html("Welcome, " + params.username);
-//             $("#accountButton").show();
-//         } else {
+ function searchForUsers() {
+	 console.log($('#searchbar').val());
+	 var username;
+	 console.log($('#accountButton').text());
+     var params = {
+    		 	searchInput: $('#searchbar').val(),
+             inputType: "searchResults",
+            	username: ($('#accountButton').text()).substring(9)
+     };
+     console.log("username-" + params.username);
+     console.log("searching for: " + params.searchInput);
+     
+     $.post("HomepageServlet", $.param(params), function(responseText) {
+         console.log("calledPOST");
+         if (responseText) {
+        	 console.log("in search if statement");
+        	 console.log(responseText);
+        	 	console.log("first user id:" + responseText[0].userId);
+         } else {
 //             $("#friendsList").html("<font color='red'>This username is already taken. Please choose another username.</font>");
-//             console.log("fail");
-//         }
-//     });
-// }
+             console.log("fail");
+         }
+     });
+ }
 
 //live search: as user types a key into the searchbar, 
 //makes an ajax call to retrieve results if user clicks drop down item, search is called

@@ -27,11 +27,13 @@ public class HomepageServlet extends HttpServlet {
 	private Connection databaseConnection = null;
 	private Statement statement = null;
 	private ResultSet databaseResults = null;
-	private DatabaseServlet databaseInstance = new DatabaseServlet();
+	private DatabaseServlet databaseInstance;
 	
 	private String amazonConnection = "jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com/EmergencyConnectStorage"
 			+ "?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false";
 	
+	public HomepageServlet() {
+	}
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
 	public void establishConnection() {
 		try {
@@ -55,6 +57,7 @@ public class HomepageServlet extends HttpServlet {
 		String currentUser = request.getParameter("username");
 		String searchType = request.getParameter("inputType");
 		
+		databaseInstance = new DatabaseServlet();
 		//RESPONSE writes all User FRIENDS, for "username" 
 		if( searchType.equals("retrieveFriends") ) {
 			databaseInstance.loadAllUsers();
@@ -85,7 +88,7 @@ public class HomepageServlet extends HttpServlet {
 		
 		// Get search results for the given term in the search bar, returns all relevant users not friends with current users	
 		} else if( searchType.equals("searchResults") ) {
-			String input = request.getParameter("value");
+			String input = request.getParameter("searchInput");
 			System.out.println("searching for: " + input);
 			
 			databaseInstance.loadAllUsers();
@@ -96,6 +99,9 @@ public class HomepageServlet extends HttpServlet {
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(json);
+				System.out.println("wrote back to search");
+			}else {
+				System.out.println("users empty!!!!");
 			}
 		}
 	
@@ -124,19 +130,22 @@ public class HomepageServlet extends HttpServlet {
 	/*returns a List of users (who are not friends with current user) matching what was Searched (looks for similar Usernames or names)
 	 * when the user hits enter, or clicks the search button, this method is called and returned to search.js*/
 	public ArrayList<User> getSearchResults(String value, String currUsername ) {
-		
+		User tempUser = null;
 		ArrayList<User> searchedUsers = new ArrayList<User>();
 		try {
 			databaseResults = statement.executeQuery("SELECT Username, Name FROM User" + 
-					" WHERE Username LIKE '" + value + "' OR Name LIKE '" + value + "'");
+					" WHERE Username LIKE '%" + value + "%' OR Name LIKE '%" + value + "%'");
 			
 			while( databaseResults.next() ) {
 				String username = databaseResults.getString("Username");
-				User tempUser = databaseInstance.getUser(username);
-				
+				System.out.println(username);
+				User temp1 = databaseInstance.getUser(currUsername);
+				System.out.println("current user: " + currUsername);
+				tempUser = databaseInstance.getUser(username);
 				int friendID = tempUser.getUserId();
-				int userID = databaseInstance.getUser(currUsername).getUserId();
-				
+				User temp = databaseInstance.getUser(currUsername);
+				int userID = temp.getUserId();
+				System.out.println("user name:" +tempUser.getFullName());
 				//only add the user to the search results, if currUser is not friends with them.
 				if( !(databaseInstance.friendAlreadyExists(userID, friendID) ) ) {
 					searchedUsers.add(tempUser);
