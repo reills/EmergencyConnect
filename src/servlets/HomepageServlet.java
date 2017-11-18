@@ -134,14 +134,19 @@ public class HomepageServlet extends HttpServlet {
 		User tempUser = null;
 		ArrayList<User> searchedUsers = new ArrayList<User>();
 		try {
+			System.out.println("BEGINNING OF GETRESULTS");
 			databaseResults = statement.executeQuery("SELECT Username, Name FROM User" + 
 					" WHERE Username LIKE '%" + value + "%' OR Name LIKE '%" + value + "%'");
 			
+//			if(databaseResults== null) {
+//				System.out.println("database results is null!!!!!!!");
+//			}
 			while( databaseResults.next() ) {
+				System.out.println("Hello!!!!!!!!!!!!");
 				String username = databaseResults.getString("Username");
 				System.out.println(username);
-				User temp1 = databaseInstance.getUser(currUsername);
 				System.out.println("current user: " + currUsername);
+				User temp1 = databaseInstance.getUser(currUsername);
 				tempUser = databaseInstance.getUser(username);
 				int friendID = tempUser.getUserId();
 				User temp = databaseInstance.getUser(currUsername);

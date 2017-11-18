@@ -120,9 +120,10 @@ public class DatabaseServlet extends HttpServlet {
 	public void loadAllUsers() {
 		
 		try {
-			if(statement == null) {
+//			if(statement == null) {
 				establishConnection();
-			}
+				System.out.println("statement is null in load all users");
+//			}
 			databaseResults = statement.executeQuery("SELECT * FROM User");
 			
 			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
@@ -157,7 +158,7 @@ public class DatabaseServlet extends HttpServlet {
 			establishConnection();
 			ResultSet databaseResults1;
 			databaseResults1 = statement.executeQuery("SELECT * FROM Relationship");
-			
+      
 			while(databaseResults1.next()) { //while more rows, it goes to the next row at rs.next
 				int userID = databaseResults1.getInt("User_One_ID");
 				int friendID = databaseResults1.getInt("User_Two_ID");
