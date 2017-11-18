@@ -37,7 +37,8 @@ $('#searchbar').keydown(function(e) {
      var params = {
     		 	searchInput: $('#searchbar').val(),
              inputType: "searchResults",
-            	username: ($('#accountButton').text()).substring(9)
+            	username: "markredekopp"
+            		//($('#accountButton').text()).substring(9)
      };
      console.log("username-" + params.username);
      console.log("searching for: " + params.searchInput);

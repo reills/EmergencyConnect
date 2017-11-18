@@ -154,11 +154,12 @@ public class DatabaseServlet extends HttpServlet {
 	//put all the user's friends into a list, and assign it to the userID, in the friendList map
 	public void getAllFriends() {
 		try {
-			databaseResults = statement.executeQuery("SELECT * FROM Relationship");
+			ResultSet databaseResults1;
+			 databaseResults1 = statement.executeQuery("SELECT * FROM Relationship");
 			
-			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
-				int userID = databaseResults.getInt("User_One_ID");
-				int friendID = databaseResults.getInt("User_Two_ID");
+			while(databaseResults1.next()) { //while more rows, it goes to the next row at rs.next
+				int userID = databaseResults1.getInt("User_One_ID");
+				int friendID = databaseResults1.getInt("User_Two_ID");
 				
 				if( friendsList.containsKey( userID )) { //if user has a key already
 					friendsList.get(userID).add(friendID);
