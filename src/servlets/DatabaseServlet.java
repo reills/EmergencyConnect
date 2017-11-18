@@ -77,7 +77,7 @@ public class DatabaseServlet extends HttpServlet {
 					
 					
 					if( databaseHash.equals(tempHash)) {
-						System.out.println("they are equal. returnign true");
+						System.out.println("Username and password correct");
 						loadAllUsers();
 						return true;
 					}
@@ -120,10 +120,9 @@ public class DatabaseServlet extends HttpServlet {
 	public void loadAllUsers() {
 		
 		try {
-//			if(statement == null) {
 				establishConnection();
-				System.out.println("statement is null in load all users");
-//			}
+				System.out.println("Loading all users");
+				
 			databaseResults = statement.executeQuery("SELECT * FROM User");
 			
 			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
@@ -136,19 +135,24 @@ public class DatabaseServlet extends HttpServlet {
 				String hash =  databaseResults.getString("Hash");
 				String email = databaseResults.getString("Email");
 				String phoneNumber = databaseResults.getString("PhoneNumber");
-				System.out.println(userID + name + username + userStatus + salt + hash + email + phoneNumber);
+				
+				//System.out.println(userID + name + username + userStatus + salt + hash + email + phoneNumber);
+				
 				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email);
-				System.out.println("in load users, username:" + username);
+				//System.out.println("in load users, username:" + username);
+				
 				usernameMap.put(username, tempUser);
 				userIdMap.put(userID, tempUser);
 				
-				getAllFriends();
 			}
+			System.out.println(" finished loading all users");
 		//databaseResults = null;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		getAllFriends();
 		closeSQLObjects();
 	}
 	
@@ -171,13 +175,15 @@ public class DatabaseServlet extends HttpServlet {
 					friendsList.put(userID, usersFriends);
 				}
 			
+				System.out.println("Getting *all* friends... user ID: " + userID + ", friendID " + friendID);
 			}
 			System.out.println("End of getAllFriends()");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//closeSQLObjects();
+		
+    closeSQLObjects();
 	}
 	
 	/* returns whether or not userID has added friendID as a a friend */
@@ -194,8 +200,6 @@ public class DatabaseServlet extends HttpServlet {
 	/* Creates all the user information using the servlet request objects. 
 	 * */
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
-
-		loadAllUsers();
 		
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
@@ -275,21 +279,12 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/*returns a user with a given username, returns null if id is not found */
 	public User getUser(String username) {
-		for (Map.Entry<String, User> entry : usernameMap.entrySet()) {
-		    String key = entry.getKey();
-		    System.out.println("username : " + key);
-		    Object value = entry.getValue();
-		    // ...
-		}
-		System.out.println("we are in get user!!");
-//		return (User)usernameMap.get(username);
-		User temp = (User)usernameMap.get(username);
+	
+		User temp = usernameMap.get(username);
 		if(temp == null) {
-			System.out.println("temp is null!");
+			System.out.println("User doesn't exist!");
 		}
-		if(temp.getUsername().equals("markredekopp")) {
-			System.out.println("getting user correctly!");
-		}
+		
 		return temp;
 	}
 	

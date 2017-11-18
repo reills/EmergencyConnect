@@ -3,14 +3,8 @@
  */
 // Open and close login form
 $("#searchClose").click(function() {
-    $("#friendsListModal").hide();
+    $("#searchModal").hide();
 })
-
-// Open and close register form
-$("#search_button").click(function() {
-    $("#registerModal").show();
-})
-
 
 //Calls search when user clicks the button
 $(document).ready(function() {
@@ -18,15 +12,17 @@ $(document).ready(function() {
     	console.log("clicked search");
         alert("clicked that search button");
         searchForUsers();
+        $("#searchModal").show();
     });
 });
 
-//Calls search when user hits enter
+//Calls search when user hits enter in the search bar
 $('#searchbar').keydown(function(e) {
     if (e.keyCode == 13) {
         console.log("clicked search");
         alert('you pressed enter ^_^');
         searchForUsers();
+        $("#searchModal").show();
     }
 });
 

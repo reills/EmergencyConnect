@@ -48,7 +48,7 @@ img {
 
 
 /* Modal Content */
-.login-modal, .register-modal, .friends-modal  {
+.login-modal, .register-modal, .search-modal  {
 	position: relative;
 	z-index: 1;
 	background: #FFFFFF;
