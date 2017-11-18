@@ -135,29 +135,32 @@ public class DatabaseServlet extends HttpServlet {
 				String hash =  databaseResults.getString("Hash");
 				String email = databaseResults.getString("Email");
 				String phoneNumber = databaseResults.getString("PhoneNumber");
-				System.out.println(username);
-				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
+				System.out.println(userID + name + username + userStatus + salt + hash + email + phoneNumber);
+				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email);
 				System.out.println("in load users, username:" + username);
 				usernameMap.put(username, tempUser);
 				userIdMap.put(userID, tempUser);
 				
 				getAllFriends();
 			}
-			
+		//databaseResults = null;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		closeSQLObjects();
 	}
 	
 	//put all the user's friends into a list, and assign it to the userID, in the friendList map
 	public void getAllFriends() {
 		try {
-			databaseResults = statement.executeQuery("SELECT * FROM Relationship");
+			establishConnection();
+			ResultSet databaseResults1;
+			databaseResults1 = statement.executeQuery("SELECT * FROM Relationship");
 			
-			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
-				int userID = databaseResults.getInt("User_One_ID");
-				int friendID = databaseResults.getInt("User_Two_ID");
+			while(databaseResults1.next()) { //while more rows, it goes to the next row at rs.next
+				int userID = databaseResults1.getInt("User_One_ID");
+				int friendID = databaseResults1.getInt("User_Two_ID");
 				
 				if( friendsList.containsKey( userID )) { //if user has a key already
 					friendsList.get(userID).add(friendID);
@@ -168,10 +171,12 @@ public class DatabaseServlet extends HttpServlet {
 				}
 			
 			}
+			System.out.println("End of getAllFriends()");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//closeSQLObjects();
 	}
 	
 	/* returns whether or not userID has added friendID as a a friend */
@@ -263,6 +268,7 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/*returns a user from a given id, returns null if id is not found */
 	public User getUser(int id) {
+		System.out.println(userIdMap.get(id));
 		return userIdMap.get(id);
 	}
 	
