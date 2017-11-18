@@ -34,7 +34,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                //TODO:::::: getUsersFriends(username);
+                getUsersFriends($('#loginUsername').val());
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
                 console.log("false");
