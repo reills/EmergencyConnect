@@ -10,12 +10,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sun.javafx.webkit.KeyCodeMap.Entry;
 
 import objects.*;
 
@@ -31,10 +34,15 @@ public class DatabaseServlet extends HttpServlet {
 	private ResultSet databaseResults = null;
 	private String amazonConnection = "jdbc:mysql://emergencyconnect.c9dhgadszva5.us-west-1.rds.amazonaws.com/EmergencyConnectStorage"
 			+ "?user=jeffreyMillerPhd&password=mierdaenculopassword&useSSL=false";
-	private HashMap<String, User > usernameMap = new HashMap<String, User>();
-	private HashMap<Integer, User > userIdMap = new HashMap<Integer, User>();
-	private HashMap<Integer, List<Integer> > friendsList = new HashMap< Integer, List<Integer> >();
+	private HashMap<String, User > usernameMap;
+	private HashMap<Integer, User > userIdMap;
+	private HashMap<Integer, List<Integer> > friendsList;
 	
+	public DatabaseServlet () {
+		usernameMap = new HashMap<String, User>();
+		userIdMap = new HashMap<Integer, User>();
+		friendsList = new HashMap< Integer, List<Integer> >();
+	}
 	
 	/*connect to our amazon database - don't overload it pls my credit card isn't fancy*/
 	public void establishConnection() {
@@ -102,7 +110,7 @@ public class DatabaseServlet extends HttpServlet {
 			}
 		} else if ( checkingAccountDetails.equals("register") ) {
 			registerUser(request, response); 
-		}
+		} 
 		
 	closeSQLObjects();
 	}
@@ -112,6 +120,9 @@ public class DatabaseServlet extends HttpServlet {
 	public void loadAllUsers() {
 		
 		try {
+			if(statement == null) {
+				establishConnection();
+			}
 			databaseResults = statement.executeQuery("SELECT * FROM User");
 			
 			while(databaseResults.next()) { //while more rows, it goes to the next row at rs.next
@@ -124,11 +135,13 @@ public class DatabaseServlet extends HttpServlet {
 				String hash =  databaseResults.getString("Hash");
 				String email = databaseResults.getString("Email");
 				String phoneNumber = databaseResults.getString("PhoneNumber");
-				
+				System.out.println(username);
 				User tempUser = new User(name, username, hash, salt, userID, userStatus, phoneNumber, email );
-				
+				System.out.println("in load users, username:" + username);
 				usernameMap.put(username, tempUser);
 				userIdMap.put(userID, tempUser);
+				
+				getAllFriends();
 			}
 			
 		} catch (SQLException e) {
@@ -163,7 +176,9 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/* returns whether or not userID has added friendID as a a friend */
 	public boolean friendAlreadyExists( int userID, int friendID) {
-		if( friendsList.get(userID).contains(friendID )) {
+		if(friendsList.get(userID) == null) {
+			return false;
+		}else if( friendsList.get(userID).contains(friendID )) {
 			return true;
 		} else {
 			return false;
@@ -253,7 +268,22 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/*returns a user with a given username, returns null if id is not found */
 	public User getUser(String username) {
-		return usernameMap.get(username);
+		for (Map.Entry<String, User> entry : usernameMap.entrySet()) {
+		    String key = entry.getKey();
+		    System.out.println("username : " + key);
+		    Object value = entry.getValue();
+		    // ...
+		}
+		System.out.println("we are in get user!!");
+//		return (User)usernameMap.get(username);
+		User temp = (User)usernameMap.get(username);
+		if(temp == null) {
+			System.out.println("temp is null!");
+		}
+		if(temp.getUsername().equals("markredekopp")) {
+			System.out.println("getting user correctly!");
+		}
+		return temp;
 	}
 	
 	/*returns an Id for a given userName, if not found- > returns null */
