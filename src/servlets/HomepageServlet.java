@@ -60,6 +60,7 @@ public class HomepageServlet extends HttpServlet {
 		databaseInstance = new DatabaseServlet();
 		//RESPONSE writes all User FRIENDS, for "username" 
 		if( searchType.equals("retrieveFriends") ) {
+			System.out.println("Preparing to display current user's friends");
 			databaseInstance.loadAllUsers();
 			int userID = databaseInstance.getUserID(currentUser);
 	
@@ -131,36 +132,33 @@ public class HomepageServlet extends HttpServlet {
 	/*returns a List of users (who are not friends with current user) matching what was Searched (looks for similar Usernames or names)
 	 * when the user hits enter, or clicks the search button, this method is called and returned to search.js*/
 	public ArrayList<User> getSearchResults(String value, String currUsername ) {
-		User tempUser = null;
+		User resultsUser = null;
 		ArrayList<User> searchedUsers = new ArrayList<User>();
 		try {
 			System.out.println("BEGINNING OF GETRESULTS");
 			databaseResults = statement.executeQuery("SELECT Username, Name FROM User" + 
 					" WHERE Username LIKE '%" + value + "%' OR Name LIKE '%" + value + "%'");
 			
-//			if(databaseResults== null) {
-//				System.out.println("database results is null!!!!!!!");
-//			}
+			User userSearching = databaseInstance.getUser(currUsername);
+			System.out.println(currUsername + ", is now searching for results");
+			int userID = userSearching.getUserId();
+			
 			while( databaseResults.next() ) {
-				System.out.println("Hello!!!!!!!!!!!!");
 				String username = databaseResults.getString("Username");
-				System.out.println(username);
-				System.out.println("current user: " + currUsername);
-				User temp1 = databaseInstance.getUser(currUsername);
-				tempUser = databaseInstance.getUser(username);
-				int friendID = tempUser.getUserId();
-				User temp = databaseInstance.getUser(currUsername);
-				int userID = temp.getUserId();
-				System.out.println("user name:" +tempUser.getFullName());
+				System.out.println("found search result; " + username);
+				
+				resultsUser = databaseInstance.getUser(username);
+				int resultID = resultsUser.getUserId();
+				
 				//only add the user to the search results, if currUser is not friends with them.
-				if( !(databaseInstance.friendAlreadyExists(userID, friendID) ) ) {
-					searchedUsers.add(tempUser);
+				if( !(databaseInstance.friendAlreadyExists(userID, resultID) ) ) {
+					searchedUsers.add(resultsUser);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	System.out.println(searchedUsers);
+	System.out.println("addresses of objects returned in search results: " + searchedUsers);
 	return searchedUsers;
 	}
 	

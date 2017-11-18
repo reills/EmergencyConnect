@@ -2,7 +2,13 @@
     <wb-module deploy-name="EmergencyConnec">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <dependent-module archiveName="mysql-connector-java-5.1.40-bin.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/EmergencyConnec/mysql-connector-java-5.1.40-bin.jar">
+        <dependent-module archiveName="gson2.8.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/EmergencyConnect/gson2.8.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="javax.servlet-api-3.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/EmergencyConnect/javax.servlet-api-3.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-java-5.1.40-bin.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/EmergencyConnect/mysql-connector-java-5.1.40-bin.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="EmergencyConnect"/>
