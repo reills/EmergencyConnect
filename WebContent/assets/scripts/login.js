@@ -32,6 +32,7 @@ $(document).ready(function() {
                 $("#loginButton").hide();
                 $("#loginModal").hide();
                 $("#registerButton").hide();
+                $("#accountMenu").show();
                 $("#welcomeMessage").html("Welcome, " + params.username);
                 $("#welcomeMessage").show();
                 getUsersFriends($('#loginUsername').val());

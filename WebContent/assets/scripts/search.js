@@ -58,6 +58,7 @@ $('#searchbar').keydown(function(e) {
          }
      });
  }
+ 
 
 //live search: as user types a key into the searchbar, 
 //makes an ajax call to retrieve results if user clicks drop down item, search is called
