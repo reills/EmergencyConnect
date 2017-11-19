@@ -10,9 +10,9 @@ $("#searchClose").click(function() {
 $(document).ready(function() {
     $("#search_button").click(function() {
     	console.log("clicked search");
-        alert("clicked that search button");
+        //alert("clicked that search button");
         searchForUsers();
-        $("#searchModal").show();
+
     });
 });
 
@@ -20,9 +20,9 @@ $(document).ready(function() {
 $('#searchbar').keydown(function(e) {
     if (e.keyCode == 13) {
         console.log("clicked search");
-        alert('you pressed enter ^_^');
+        //alert('you pressed enter ^_^');
         searchForUsers();
-        $("#searchModal").show();
+        
     }
 });
 
@@ -44,7 +44,14 @@ $('#searchbar').keydown(function(e) {
          if (responseText) {
         	 console.log("in search if statement");
         	 console.log(responseText);
-        	 	console.log("first user id:" + responseText[0].userId);
+        	 console.log("first user id:" + responseText[0].userId);
+        	 var i; 
+        	 for(i=0; i<Object.keys(responseText).length; i++){
+        		 var name = responseText[i].fullName;
+        		 
+        		 $("#searchResults").html("<tr><td><label>"+name+"</label></td><td><button onclick='follow("+name+")' type='button' value='Follow'>Follow</button></td></tr>"); 
+        	 }
+        	 $("#searchModal").show();
          } else {
 //             $("#friendsList").html("<font color='red'>This username is already taken. Please choose another username.</font>");
              console.log("fail");
@@ -74,6 +81,9 @@ $('#searchbar').keydown(function(e) {
 //     });
 // });
 
+function follow(followeeUsername){
+	console.log("clicked follow!!");
+}
 
 
 //Retrieve logged in users friends from the database once user logs in
