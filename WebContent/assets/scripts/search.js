@@ -96,13 +96,19 @@ function getUsersFriends(userName) {
     $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
     	$("#friendsList").html("");
     	var friendsJSON = responseJson;
-    	console.log(friendsJSON);
-    	var $ul = $("<ul id=friendObjects>").appendTo($("#friendsList"));
-    	for (var i=0; i<friendsJSON.length; i++){
-    		console.log(friendsJSON[i]);
-    		($ul).append("<li>" + friendsJSON[i].fullName + "</li>");
+    	
+    	if( jQuery.isEmptyObject( friendsJSON) )  {
+	    	console.log(friendsJSON);
+	    	 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
+    	} else {
+    	 	console.log(friendsJSON);
+    		var $ul = $("<ul id=friendObjects>").appendTo($("#friendsList"));
+	    	for (var i=0; i<friendsJSON.length; i++){
+	    		console.log(friendsJSON[i]);
+	    		($ul).append("<li>" + friendsJSON[i].fullName + "</li>");
+	    	}
+	    	($ul).append("</ul>");
     	}
-    	($ul).append("</ul>");
     	/*
         var $ul = $("<ul id=friendObjects>").appendTo($("#friendsList")); // Create HTML <ul> element and append it to HTML DOM element with ID "somediv".
         $.each(responseJson, function(index, item) { // Iterate over the JSON array.
