@@ -261,12 +261,14 @@ public class DatabaseServlet extends HttpServlet {
 	public void addUserFriend(int userId, int friendId) {
 		establishConnection();
 		
-		User temp = getUser( userId);
-		
-		if( temp != null ) {
-			temp.addFriend(friendId);
+		if( friendsList.containsKey( userId )) { //if user has a key already
+			friendsList.get(userId).add(friendId);
+		} else {
+			List<Integer> usersFriends = new ArrayList<Integer>();
+			usersFriends.add(friendId);
+			friendsList.put(userId, usersFriends);
 		}
-		
+	
 		try {
 			statement.executeUpdate("INSERT INTO Relationship VALUES ( '" + userId + "','" + friendId + "')");
 		} catch (SQLException e) {

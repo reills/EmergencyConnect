@@ -63,7 +63,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#accountButton").html("Welcome, " + params.username);
                 $("#accountButton").show();
-                //TODO:::::: getUsersFriends(username);
+                getUsersFriends($('#registerUsername').val());
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
                 console.log("fail");
