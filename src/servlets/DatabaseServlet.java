@@ -204,6 +204,10 @@ public class DatabaseServlet extends HttpServlet {
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		
+		if(usernameMap == null || usernameMap.isEmpty()) {
+			loadAllUsers();
+		}
+		
 		if(!userExists(enteredUsername)){
 			
 			try{
@@ -337,4 +341,8 @@ public class DatabaseServlet extends HttpServlet {
 			System.out.println("trying to close sql objects: " + sqle.getMessage() );
 		}
 	}
+	
+//	public followPerson(String ) {
+//		
+//	}
 }
