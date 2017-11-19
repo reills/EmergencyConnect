@@ -29,7 +29,7 @@ $('#searchbar').keydown(function(e) {
  function searchForUsers() {
 	 console.log($('#searchbar').val());
 	 var username;
-	 console.log($('#accountButton').text());
+	 console.log($('#welcomeMessage').text());
      var params = {
     		 	searchInput: $('#searchbar').val(),
              inputType: "searchResults",

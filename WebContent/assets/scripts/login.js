@@ -32,8 +32,8 @@ $(document).ready(function() {
                 $("#loginButton").hide();
                 $("#loginModal").hide();
                 $("#registerButton").hide();
-                $("#accountButton").html("Welcome, " + params.username);
-                $("#accountButton").show();
+                $("#welcomeMessage").html("Welcome, " + params.username);
+                $("#welcomeMessage").show();
                 getUsersFriends($('#loginUsername').val());
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
@@ -61,8 +61,8 @@ $(document).ready(function() {
                 $("#loginButton").hide();
                 $("#registerModal").hide();
                 $("#registerButton").hide();
-                $("#accountButton").html("Welcome, " + params.username);
-                $("#accountButton").show();
+                $("#welcomeMessage").html("Welcome, " + params.username);
+                $("#welcomeMessage").show();
                 getUsersFriends($('#registerUsername').val());
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
