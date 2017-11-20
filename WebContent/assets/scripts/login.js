@@ -36,6 +36,9 @@ $(document).ready(function() {
                 $("#welcomeMessage").html("Welcome, " + params.username);
                 $("#welcomeMessage").show();
                 $("#loggedInFeeds").show();
+                $("#col-no1").attr("class", "col-md-4");
+                $("#col-no2").attr("class", "col-md-4");
+
                 getUsersFriends($('#loginUsername').val());
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
