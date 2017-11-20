@@ -344,6 +344,16 @@ public class DatabaseServlet extends HttpServlet {
 		}
 	}
 	
+	public void updateStatus(int userID, String status){
+		establishConnection();
+		try {
+			statement.executeQuery("UPDATE User SET UserStatus='" + status + "' WHERE UserID='" + userID + "'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeSQLObjects();
+	}
 //	public followPerson(String ) {
 //		
 //	}
