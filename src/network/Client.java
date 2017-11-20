@@ -25,7 +25,6 @@ public class Client extends Thread {
 				pw.println("Donald: " + line);
 				pw.flush();
 			}
-			
 		} catch (IOException ioe) {
 			System.out.println("ioe in Client constructor: " + ioe.getMessage());
 		}

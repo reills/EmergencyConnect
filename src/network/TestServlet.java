@@ -52,6 +52,7 @@ public class TestServlet extends HttpServlet {
 			PrintWriter pw = new PrintWriter(s.getOutputStream());
 			pw.println("Donald is checked in.");
 			System.out.println("Checked in.");
+			pw.flush();
 			
 		} catch (IOException ioe) {
 			System.out.println("ioe in Client constructor: " + ioe.getMessage());

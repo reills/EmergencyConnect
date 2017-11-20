@@ -96,7 +96,11 @@
 			<script>
 				$("#checkbutt").click(function() {
 					console.log("ho!");
-			 	    $.post("TestServlet", $.param(0), function(responseText) {
+					var params = {
+			    		 	userCheckedIn: $('#welcomeMessage').text().substring(9),
+				     };
+			 	    $.post("TestServlet", $.param(params), function(responseText) {
+			
 			 	         console.log("calledPOST");
 			 	         if (responseText) {
 			 	        	 console.log("checkin1");
