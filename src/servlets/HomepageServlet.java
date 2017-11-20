@@ -117,7 +117,9 @@ public class HomepageServlet extends HttpServlet {
 		try {
 			databaseResults = statement.executeQuery("SELECT * From Relationship WHERE User_One_ID='" +  userId + "'");
 			while( databaseResults.next() ) {
-				int friendID = databaseResults.getInt("User_Two_ID");
+//				int friendID = databaseResults.getInt("User_Two_ID");
+				int friendID = databaseResults.getInt(2);
+				
 				User tempFriend = databaseInstance.getUser(friendID);
 				System.out.println(friendID);
 				userFriends.add(tempFriend);

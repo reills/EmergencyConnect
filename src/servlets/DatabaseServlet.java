@@ -110,7 +110,16 @@ public class DatabaseServlet extends HttpServlet {
 			}
 		} else if ( checkingAccountDetails.equals("register") ) {
 			registerUser(request, response); 
-		} 
+		}  else if( checkingAccountDetails.equals("follow") ) {
+			loadAllUsers();
+			String user = request.getParameter("userID");
+			System.out.println(user);
+			String friendId = request.getParameter("friendID");
+			
+			int friendID = Integer.parseInt(friendId);
+			int userId = usernameMap.get(user).getUserId();
+			addUserFriend(userId, friendID);
+		}
 		
 	closeSQLObjects();
 	}

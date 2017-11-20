@@ -120,3 +120,11 @@ img {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+.resultNames{
+ 	padding-right: 20%;
+ }
+
+p.input { 
+	vertical-align: text-bottom; 
+}
