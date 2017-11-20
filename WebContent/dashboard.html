@@ -28,9 +28,6 @@
          fetchNYT();
          fetchLocation();
       </script>
-      
-      
-
 
       <div class="wrapper">
       <div class="sidebar" data-color="red" data-image="assets/img/sidebar-5.jpg">
@@ -93,11 +90,24 @@
                 <!-- First column -->
                <div class="col-md-4">
                
-               <form action="TestServlet" method="get">
-				    <input type="submit" name="button1" value="Button 1" />
-				    <input type="submit" name="button2" value="Button 2" />
-				    <input type="submit" name="button3" value="Button 3" />
-				</form>
+               
+			<button id="checkbutt">*poke*</button>
+	
+			<script>
+				$("#checkbutt").click(function() {
+					console.log("ho!");
+			 	    $.post("TestServlet", $.param(0), function(responseText) {
+			 	         console.log("calledPOST");
+			 	         if (responseText) {
+			 	        	 console.log("checkin1");
+			 	        	 console.log(responseText);
+			 	         } else {
+			 	             console.log("fail");
+			 	         }
+			 	    });
+				});
+			</script>
+				
                
                
                
