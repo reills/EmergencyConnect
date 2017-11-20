@@ -75,7 +75,7 @@ public class HomepageServlet extends HttpServlet {
 		} else if( searchType.equals("liveSearch"))   {
 			String input = request.getParameter("value");
 			
-			if( input.length() == -1  )  { // TODO, this is never true-- auto-search should be off until the presentation!
+			if( input.length() != 0  )  { // TODO, this is never true-- auto-search should be off until the presentation!
 				System.out.println("searching for: " + input);
 				ArrayList<String> allUserNames = getSearchTerms();
 				
