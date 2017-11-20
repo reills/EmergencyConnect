@@ -42,16 +42,17 @@ public class TestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String username = request.getParameter("username");
+		String state = request.getParameter("state");
 		
 		String hostname = "localhost";
-		int port = 5000;
+		int port = 1024;
 		try {
 			System.out.println("Trying to connect to " + hostname + ":" + port);
 			Socket s = new Socket(hostname, port);
 			System.out.println("Connected to " + hostname + ":" + port);
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			PrintWriter pw = new PrintWriter(s.getOutputStream());
-			pw.println(username + "," + "safe");
+			pw.println(username + "," + state);
 			System.out.println("Checked in.");
 			pw.flush();
 			

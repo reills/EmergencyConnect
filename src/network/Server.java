@@ -37,6 +37,6 @@ public class Server {
 	}
 	
 	public static void main(String [] args) {
-		Server ser = new Server(5000);
+		Server ser = new Server(1024);
 	}
 }

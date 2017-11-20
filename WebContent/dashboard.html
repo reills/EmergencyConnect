@@ -134,7 +134,8 @@
 	              <div class="card" style="padding: 20px" id="checkinCard">
 	              		<h4 class="title" style="margin-bottom: 5px">Are you safe?</h4>
 	              	<div>
-	              		<button id="checkbutt" class="btn btn-success">Check in</button>
+	              		<button id="checkbutt" class="btn btn-success">Safe</button>
+	              		<button id="notSafeButton" class="btn btn-danger">Not Safe</button>
 
 						<script>
 							$("#checkbutt").click(function() {
@@ -142,19 +143,26 @@
 
 								var params = {
 						    		 	username: $("#welcomeMessage").text().substring(9),
+						    		 	state: "safe"
 							    };
 								
 						 	    $.post("TestServlet", $.param(params), function(responseText) {
-						
-						 	         console.log("calledPOST");
-						 	         if (responseText) {
-						 	        	 console.log("checkin1");
-						 	        	 console.log(responseText);
-						 	         } else {
-						 	             console.log("fail");
-						 	         }
+						 	         console.log("Sent status to server. Server will send to database.");
 						 	    });
 							});
+						 	    
+					 	   $("#notSafeButton").click(function() {
+						 	    $("#checkinCard").fadeOut(400);
+
+								var params = {
+						    		 	username: $("#welcomeMessage").text().substring(9),
+						    		 	state: "notsafe"
+							    };
+								
+						 	    $.post("TestServlet", $.param(params), function(responseText) {
+						 	         console.log("Sent status to server. Server will send to database.");
+						 	    });
+					 	   });
 						</script>
 	              	</div>
 	              </div>
