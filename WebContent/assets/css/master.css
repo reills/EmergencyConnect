@@ -4,6 +4,11 @@
 	height:120px;
 }
 
+#map {
+  height: 300px;
+  width: 100%;
+ }
+ 
 .profilePicture img:hover {
 	-webkit-transition: all 1s ease;
 	transform:scale(1.2);
