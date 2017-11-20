@@ -51,7 +51,7 @@ public class TestServlet extends HttpServlet {
 			System.out.println("Connected to " + hostname + ":" + port);
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			PrintWriter pw = new PrintWriter(s.getOutputStream());
-			pw.println(username + " is checked in.");
+			pw.println(username + "," + "safe");
 			System.out.println("Checked in.");
 			pw.flush();
 			

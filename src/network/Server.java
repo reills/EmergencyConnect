@@ -28,11 +28,11 @@ public class Server {
 	public void broadcast(String message, ServerThread st) {
 		if (message != null) {
 			System.out.println(message);
-			for(ServerThread threads : serverThreads) {
-				if (st != threads) {
-					threads.sendMessage(message);
-				}
-			}
+			String [] params = message.split(",");
+			String username = params[0];
+			String state = params[1];
+			DatabaseRequest dbr = new DatabaseRequest(username, state);
+			dbr.start();
 		}
 	}
 	
