@@ -227,7 +227,7 @@ public class DatabaseServlet extends HttpServlet {
 			fullName + ", phoneNumber: " + phoneNumber + ", username: " + enteredUsername + ", password: " + enteredPassword 
 			+ ", UserID: " + userID);
 
-			String userStatus = "Just signed up! ";
+			String userStatus = "pending";
 			String salt =  LoginHash.getSalt();
 			String hash =  LoginHash.generateHash(salt + enteredPassword);
 			
