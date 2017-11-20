@@ -16,6 +16,7 @@ function fetchLocationServices(position) {
     lat = position.coords.latitude;
     long = position.coords.longitude;
     fetchWeather();
+    initMap();
 
     $.ajax({
         dataType: "json",
