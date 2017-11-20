@@ -4,6 +4,7 @@
 // Open and close login form
 $("#searchClose").click(function() {
     $("#searchModal").hide();
+    location.reload();
 })
 
 //Calls search when user clicks the button
@@ -29,11 +30,11 @@ $('#searchbar').keydown(function(e) {
  function searchForUsers() {
 	 console.log($('#searchbar').val());
 	 var username;
-	 console.log($('#welcomeMessage').text());
+	 console.log($('#accountButton').text());
      var params = {
     		 	searchInput: $('#searchbar').val(),
              inputType: "searchResults",
-            	username: "markredekopp"
+            	username: Cookies.get('username')
             		//($('#accountButton').text()).substring(9)
      };
      console.log("username-" + params.username);
@@ -42,16 +43,33 @@ $('#searchbar').keydown(function(e) {
      $.post("HomepageServlet", $.param(params), function(responseText) {
          console.log("calledPOST");
          if (responseText) {
-        	 console.log("in search if statement");
-        	 console.log(responseText);
-        	 console.log("first user id:" + responseText[0].userId);
-        	 var i; 
-        	 for(i=0; i<Object.keys(responseText).length; i++){
-        		 var name = responseText[i].fullName;
-        		 
-        		 $("#searchResults").html("<tr><td><label>"+name+"</label></td><td><button onclick='follow("+name+")' type='button' value='Follow'>Follow</button></td></tr>"); 
-        	 }
-        	 $("#searchModal").show();
+	        	 $("#searchResults").html("");
+	        	 console.log("in search if statement");
+	        	 console.log(responseText);
+	        	 console.log("first user id:" + responseText[0].userId);
+	        	 var i; 
+	        	 var responseJson = responseText;
+	        	 for(i=0; i<responseJson.length; i++){
+	        		 var name = responseJson[i].username;
+	        		 var id = responseJson[i].userId;
+	        		 console.log("here is user "+ id);
+	        		 //$("#searchResults").append("<div style='display:inline-block' class='row'><div class='col-md-6' ><p style='font-size:15px;'>"+name+"</p></div><div class='col-md-6'><button id="+id+" style='vertical-align:'text-bottom' type='button' value='Follow'>Follow</button></div></div><br>"); 
+//	        		 $("#searchResults").append("<p class='box'><span class='resultNames'>"+name+"</span> <input id='"+id+"' onclick='follow(&apos;"+name+"&apos;,&apos;"+id+"&apos;)&quot; type=&apos;button&apos; value=&apos;Follow&apos;/></p>"); 
+	        		 var val = "Mark";
+	        		 var str = "<p class='box'>" +
+	        		 "<span class='resultNames'>"+name+"</span>" +
+	        		 "<input type='button' id='"+id+"' onclick=\"follow('"  + Cookies.get("username") + "'," + id + ")\" value='Follow'></input>" +
+	        		 "</p>";
+	        		 
+//	        		 var inputElement = document.createElement('input');
+//	        		 inputElement.type = "button"
+//	        		 inputElement.addEventListener('click', function(){
+//		        		 $("#searchResults").append("<p class='box'><span class='resultNames'>"+name+"</span> <input id='"+id+"' onclick='follow(&apos;"+name+"&apos;,&apos;"+id+"&apos;)&quot; type=&apos;button&apos; value=&apos;Follow&apos;/></p>"); 
+//
+//	        		 });
+	        		 $("#searchResults").append(str); 	
+	        	 }
+	        	 $("#searchModal").show();
          } else {
 //             $("#friendsList").html("<font color='red'>This username is already taken. Please choose another username.</font>");
              console.log("fail");
@@ -82,8 +100,21 @@ $('#searchbar').keydown(function(e) {
 //     });
 // });
 
-function follow(followeeUsername){
+function follow(followeeUsername,id){
 	console.log("clicked follow!!");
+	$('#'+id).val("Followed ✔");
+	    
+	        var params = {
+	            userID: followeeUsername,
+	            friendID: id,
+	            inputType: "follow"
+	        };
+	        $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
+		       
+	        });
+	        getUsersFriends(Cookies.get("username"));
+        	console.log(($('#accountButton').text()).substring(9));
+// 	       location.reload();
 }
 
 
