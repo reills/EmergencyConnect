@@ -40,6 +40,10 @@ $(document).ready(function() {
                 $("#col-no2").attr("class", "col-md-4");
 
                 getUsersFriends($('#loginUsername').val());
+                if (Cookies.get('username') != params.username){
+                	Cookies.set('username', params.username);
+                	Cookies.set('password', params.password);
+                }
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
                 console.log("false");
@@ -76,3 +80,34 @@ $(document).ready(function() {
         });
     });
 })
+
+function currentUserCookies(){
+	 //console.log(Cookies.get() === 'undefined');
+	 if(Cookies.get('username') === 'undefined'){}
+	 else {
+		 //console.log("cookies");
+		 var params = {
+		            username: Cookies.get('username'),
+		            password: Cookies.get('password'),
+		            inputType: "login"
+		        };
+		 $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
+			 if (responseText == "VALID") {
+		                $("#loginButton").hide();
+		                $("#loginModal").hide();
+		                $("#registerButton").hide();
+		                $("#accountMenu").show();
+		                $("#welcomeMessage").html("Welcome, " + params.username);
+		                $("#welcomeMessage").show();
+		                $("#loggedInFeeds").show();
+		                $("#col-no1").attr("class", "col-md-4");
+		                $("#col-no2").attr("class", "col-md-4");
+
+		                getUsersFriends(params.username);
+		            } else {
+		                $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
+		                console.log("false");
+		            }
+		        });
+	 }
+ }
