@@ -41,6 +41,7 @@ public class TestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String username = request.getParameter("username");
 		
 		String hostname = "localhost";
 		int port = 5000;
@@ -50,7 +51,7 @@ public class TestServlet extends HttpServlet {
 			System.out.println("Connected to " + hostname + ":" + port);
 			BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			PrintWriter pw = new PrintWriter(s.getOutputStream());
-			pw.println("Donald is checked in.");
+			pw.println(username + " is checked in.");
 			System.out.println("Checked in.");
 			pw.flush();
 			

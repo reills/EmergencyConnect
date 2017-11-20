@@ -97,8 +97,9 @@
 				$("#checkbutt").click(function() {
 					console.log("ho!");
 					var params = {
-			    		 	userCheckedIn: $('#welcomeMessage').text().substring(9),
+			    		 	username: $("#welcomeMessage").text().substring(9),
 				     };
+					
 			 	    $.post("TestServlet", $.param(params), function(responseText) {
 			
 			 	         console.log("calledPOST");
