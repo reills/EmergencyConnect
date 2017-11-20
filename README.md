@@ -15,3 +15,9 @@ This web application was developed during Fall 2017 as our final project for CSC
 * jQuery
 * SQL
 * Amazon Web Services
+* Java Database Connectivity (JDBC)
+* Twitter API
+* Google Maps Javascript API
+* JS Cookie
+
+
