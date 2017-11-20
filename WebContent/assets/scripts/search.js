@@ -103,19 +103,31 @@ function getUsersFriends(userName) {
 	    	 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
     	} else {
     	 	console.log(friendsJSON);
-    		var $ul = $("<ul id=friendObjects>").appendTo($("#friendsList"));
+    	 	
+    	 	
+    		var $ul = $("<div id='friendObjects' class='container-fluid' >").appendTo($("#friendsList"));
 	    	for (var i=0; i<friendsJSON.length; i++){
+	    		
 	    		console.log(friendsJSON[i]);
-	    		($ul).append("<li>" + friendsJSON[i].fullName + "</li>");
+	    		console.log(friendsJSON[i].status);
+	    		
+	    	 	var $divRow = $("<div 'class=row'>");
+	    	 	($ul).append($divRow);
+	    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
+	    	 	
+	    		if( friendsJSON[i].status == "pending") {
+	    			($divRow).append("<button id='pending_status'>"+ friendsJSON[i].status + "</button");
+	    		}
+	    		else if(friendsJSON[i].status == "not safe" ) {
+	    			($divRow).append("<button id='danger_status'>"+ friendsJSON[i].status + "</button");
+	    		}else {
+	    			($divRow).append("<button id='safe_status'>"+ friendsJSON[i].status + "</button");
+	    		}
+	    		($divRow).append("</div>");
 	    	}
-	    	($ul).append("</ul>");
+	    	($ul).append("</div>");
     	}
-    	/*
-        var $ul = $("<ul id=friendObjects>").appendTo($("#friendsList")); // Create HTML <ul> element and append it to HTML DOM element with ID "somediv".
-        $.each(responseJson, function(index, item) { // Iterate over the JSON array.
-            $("<li>").text(item).appendTo($ul); // Create HTML <li> element, set its text content with currently iterated item and append it to the <ul>.
-        });
-        */
+ 
     });
 }
 
