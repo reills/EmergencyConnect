@@ -103,7 +103,17 @@
                <!-- Second column -->
                <div class="col-md-6" id="col-no2">
                   <div class="row" id="weatherCard" style="padding: 10px"></div>
-                  <div class="row" style="padding: 10px"><a class="twitter-timeline" href="https://twitter.com/search?q=USC" data-widget-id="930907791878864896">Tweets about USC</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+                  	      
+		   <div class="card" >
+                  	<h3   style="text-align:center;"> Your location </h3> 
+                  	<div id="map">
+                 	<script async defer
+                 	 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPL7i0Bf9ZUlclt2_KBhaR6lm8hPq6L9o&callback=initMap">
+			</script>
+		       </div>
+		   </div>
+					      
+		  <div class="row" style="padding: 10px"><a class="twitter-timeline" href="https://twitter.com/search?q=USC" data-widget-id="930907791878864896">Tweets about USC</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
                </div>
             <!-- Search -->
             <div class="col-md-4" id="loggedInFeeds" style="display: none">
