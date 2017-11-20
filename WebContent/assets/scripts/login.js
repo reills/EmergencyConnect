@@ -35,6 +35,7 @@ $(document).ready(function() {
                 $("#accountMenu").show();
                 $("#welcomeMessage").html("Welcome, " + params.username);
                 $("#welcomeMessage").show();
+                $("#loggedInFeeds").show();
                 getUsersFriends($('#loginUsername').val());
             } else {
                 $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");

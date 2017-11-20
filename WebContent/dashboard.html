@@ -75,6 +75,8 @@
 			              		$("#accountMenu").hide();
 			              		$("#loginButton").show();
 			              		$("#registerButton").show();
+			              		$("#loggedInFeeds").hide();
+			              		$("checkinCard").show();
 			              	});
 			              </script>
 			            </ul>
@@ -100,7 +102,7 @@
                   <div class="row" style="padding: 10px"><a class="twitter-timeline" href="https://twitter.com/search?q=USC" data-widget-id="930907791878864896">Tweets about USC</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
                </div>
             <!-- Search -->
-            <div class="col-md-4" >
+            <div class="col-md-4" id="loggedInFeeds" style="display: none">
                <div class="card">
                   <div class="header">
                   	  <h2> Search for Friends </h2>
@@ -152,7 +154,6 @@
 						</script>
 	              	</div>
 	              </div>
-
 	           </div>
 	        </div>
 	     </div>
