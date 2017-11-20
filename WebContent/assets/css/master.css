@@ -71,6 +71,12 @@ img {
     float: right;
  
 }
+
+
+#twitter-widget-0 {
+  width: 100% !important;
+}
+    
 /* ======== Friends' Statuses buttons =========*/
 
 /* ======== SEARCH BAR =========*/
