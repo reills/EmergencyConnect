@@ -149,7 +149,7 @@ function getUsersFriends(userName) {
 	    		if( friendsJSON[i].status == "pending") {
 	    			($divRow).append("<button id='pending_status'>"+ friendsJSON[i].status + "</button");
 	    		}
-	    		else if(friendsJSON[i].status == "not safe" ) {
+	    		else if(friendsJSON[i].status == "notsafe" ) {
 	    			($divRow).append("<button id='danger_status'>"+ friendsJSON[i].status + "</button");
 	    		}else {
 	    			($divRow).append("<button id='safe_status'>"+ friendsJSON[i].status + "</button");

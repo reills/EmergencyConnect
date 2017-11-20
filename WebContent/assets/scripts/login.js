@@ -36,6 +36,7 @@ $(document).ready(function() {
                 $("#welcomeMessage").html("Welcome, " + params.username);
                 $("#welcomeMessage").show();
                 $("#loggedInFeeds").show();
+                $("#checkinCard").show();
                 $("#col-no1").attr("class", "col-md-4");
                 $("#col-no2").attr("class", "col-md-4");
 
