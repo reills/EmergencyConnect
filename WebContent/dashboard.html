@@ -89,35 +89,30 @@
           <div class="row">
                 <!-- First column -->
                <div class="col-md-4">
-               
-               
-			<button id="checkbutt">*poke*</button>
-	
-			<script>
-				$("#checkbutt").click(function() {
-					console.log("ho!");
-					var params = {
-			    		 	username: $("#welcomeMessage").text().substring(9),
-				     };
+				<button id="checkbutt">*poke*</button>
+		
+					<script>
+						$("#checkbutt").click(function() {
+							console.log("ho!");
+							var params = {
+					    		 	username: $("#welcomeMessage").text().substring(9),
+						     };
+							
+					 	    $.post("TestServlet", $.param(params), function(responseText) {
 					
-			 	    $.post("TestServlet", $.param(params), function(responseText) {
-			
-			 	         console.log("calledPOST");
-			 	         if (responseText) {
-			 	        	 console.log("checkin1");
-			 	        	 console.log(responseText);
-			 	         } else {
-			 	             console.log("fail");
-			 	         }
-			 	    });
-				});
-			</script>
-				
-               
-               
-               
-                  <div class="row" id="APNews" style="padding: 10px"></div>
-                  <div class="row" id="NYTNews" style="padding: 10px"></div>
+					 	         console.log("calledPOST");
+					 	         if (responseText) {
+					 	        	 console.log("checkin1");
+					 	        	 console.log(responseText);
+					 	         } else {
+					 	             console.log("fail");
+					 	         }
+					 	    });
+						});
+					</script>
+					
+	               <div class="row" id="APNews" style="padding: 10px"></div>
+	               <div class="row" id="NYTNews" style="padding: 10px"></div>
                </div>
                <!-- Second column -->
                <div class="col-md-4">
@@ -136,7 +131,7 @@
                      <div class="form" >
                         <div class="col-md-12" style="margin-bottom:0" >
                            <input type="text" id="searchbar" class="form-control" placeholder="Search..." value="">
-                           <img src="assets/img/red_search_img.png" id="search_button">
+                           <a href="#"><img src="assets/img/red_search_img.png" id="search_button"></a>
                            <!--SEARCH results!--> 
                         </div> 
                      </div>
