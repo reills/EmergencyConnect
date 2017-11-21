@@ -3,8 +3,9 @@
  */
 // Open and close login form
 $("#searchClose").click(function() {
-    $("#searchModal").hide();
-    location.reload();
+	getUsersFriends(Cookies.get("username"));
+	$("#searchModal").hide();
+   
 })
 
 //Calls search when user clicks the button
@@ -23,7 +24,6 @@ $('#searchbar').keydown(function(e) {
         console.log("clicked search");
         //alert('you pressed enter ^_^');
         searchForUsers();
-        
     }
 });
 
@@ -71,8 +71,12 @@ $('#searchbar').keydown(function(e) {
 	        	 }
 	        	 $("#searchModal").show();
          } else {
+        	 	$("#searchResults").html("");
+        	 	var str = "<p> No results found for &quot;" + params.searchInput + "&quot; </p>"
+        	 	$("#searchResults").append(str);
+        	 	$("#searchModal").show();
 //             $("#friendsList").html("<font color='red'>This username is already taken. Please choose another username.</font>");
-             console.log("fail");
+             console.log("no results");
          }
      });
  }
@@ -112,7 +116,7 @@ function follow(followeeUsername,id){
 	        $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
 		       
 	        });
-	        getUsersFriends(Cookies.get("username"));
+	     
         	console.log(($('#accountButton').text()).substring(9));
 // 	       location.reload();
 }
@@ -147,12 +151,12 @@ function getUsersFriends(userName) {
 	    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
 	    	 	
 	    		if( friendsJSON[i].status == "pending") {
-	    			($divRow).append("<button id='pending_status'>"+ friendsJSON[i].status + "</button");
+	    			($divRow).append("<button id='pending_status'> Status Pending... </button");
 	    		}
 	    		else if(friendsJSON[i].status == "notsafe" ) {
-	    			($divRow).append("<button id='danger_status'>"+ friendsJSON[i].status + "</button");
+	    			($divRow).append("<button id='danger_status'>  Not Safe  </button");
 	    		}else {
-	    			($divRow).append("<button id='safe_status'>"+ friendsJSON[i].status + "</button");
+	    			($divRow).append("<button id='safe_status'> Safe </button");
 	    		}
 	    		($divRow).append("</div>");
 	    	}
