@@ -125,14 +125,14 @@ function follow(followeeUsername,id){
 //Retrieve logged in users friends from the database once user logs in
 function getUsersFriends() {
 	    var params = {
-	        username: $('#loginUsername').val(),
+	        username: $("#welcomeMessage").text().substring(9),
 	        inputType: "retrieveFriends"
 	    };    
 	    if( params.username == "" ) {
 			console.log("blank username");
 		}
 	    else {
-	    		console.log("username: "+ $('#loginUsername').val());
+	    		console.log("username: "+ $("#welcomeMessage").text().substring(9)  );
 		    $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
 		    	$("#friendsList").html("");
 		    	var friendsJSON = responseJson;
@@ -150,8 +150,9 @@ function getUsersFriends() {
 			    		console.log(friendsJSON[i]);
 			    		console.log(friendsJSON[i].status);
 			    		
-			    	 	var $divRow = $("<div 'class=row'>");
+			    	 	var $divRow = $("<div 'class=row' id='friend"+friendsJSON[i].userId +"' >");
 			    	 	($ul).append($divRow);
+			    	 	
 			    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
 			    	 	
 			    		if( friendsJSON[i].status == "pending") {
@@ -162,6 +163,8 @@ function getUsersFriends() {
 			    		}else {
 			    			($divRow).append("<button id='safe_status'> Safe </button");
 			    		}
+			    		
+			    		($divRow).append("<button id='removeFriend'" + friendsJSON[i].userId + "' onclick=\"remove('"  +  params.username + "'," + friendsJSON[i].userId + ")\" > Remove </button");
 			    		($divRow).append("</div>");
 			    	}
 			    	($ul).append("</div>");
@@ -177,6 +180,25 @@ function getUsersFriends() {
 //	    getUsersFriends();
 //	}, 5000);
 
+
+//removes the whole row of the button specified and the friend to remove in the databaseServlet
+function remove( currUsername, removeId){
+	console.log("called remove !");
+	$('#friend'+removeId).remove();
+	 
+	 var params = {
+	            username: currUsername,
+	            friendID: removeId,
+	            inputType: "remove"
+	        };
+	        $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
+		       
+	        });
+	        
+	 if ( $('#friendObjects').children().length == 0 ) {
+		 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
+	 }
+}
 
 
 //Display message for guest (necesssary if we create cookies, etc. )

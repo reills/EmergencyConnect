@@ -119,6 +119,15 @@ public class DatabaseServlet extends HttpServlet {
 			int friendID = Integer.parseInt(friendId);
 			int userId = usernameMap.get(user).getUserId();
 			addUserFriend(userId, friendID);
+		}  else if( checkingAccountDetails.equals("remove") ) {
+			loadAllUsers();
+			String username = request.getParameter("username");
+			String friendId = request.getParameter("friendID");
+			System.out.println("removing " + username + "'s friend of id " + friendId);
+			
+			int friendID = Integer.parseInt(friendId);
+			int userId = usernameMap.get(username).getUserId();
+			removeUserFriend(userId, friendID);
 		}
 		
 	closeSQLObjects();
@@ -270,6 +279,16 @@ public class DatabaseServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void removeUserFriend(int userId, int friendId) {
+		establishConnection();
+		
+		try {
+			statement.executeUpdate("DELETE FROM Relationship WHERE User_One_ID = '" + userId + "' AND User_Two_ID='" + friendId + "'");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/*returns a user from a given id, returns null if id is not found */

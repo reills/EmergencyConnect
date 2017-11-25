@@ -144,8 +144,11 @@ public class HomepageServlet extends HttpServlet {
 		ArrayList<User> searchedUsers = new ArrayList<User>();
 		try {
 			System.out.println("BEGINNING OF GETRESULTS");
-			databaseResults = statement.executeQuery("SELECT Username, Name FROM User" + 
-					" WHERE Username LIKE '%" + value + "%' OR Name LIKE '%" + value + "%'");
+			
+			databaseResults = statement.executeQuery("SELECT Username, Name FROM User"
+					+ " WHERE NOT Username='" + currUsername + "' AND (Username LIKE '%" + value + "%' OR Name LIKE '%" + value + "%')");
+			
+			
 			
 			User userSearching = databaseInstance.getUser(currUsername);
 			System.out.println(currUsername + ", is now searching for results");

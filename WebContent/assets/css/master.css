@@ -35,9 +35,18 @@ img {
 
 /* ======== Friends' Statuses buttons =========*/
 
+#removeFriend {
+    background-color: #FFB2B2; /* light pink */
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    float: right;
+}
+
+
 #safe_status {
     background-color: #4CAF50; /* Green */
-    border: black;
     text-align: center;
     color: black;
     text-decoration: none;
@@ -49,7 +58,6 @@ img {
 
 #pending_status {
     background-color: #fffa00; /* Yellow */
-    border: black;
     text-align: center;
     color: black;
     text-decoration: none;
@@ -61,7 +69,6 @@ img {
 
 #danger_status {
     background-color: #f92c2c; /* Red */
-    border: black;
     text-align: center;
     color: black;
     text-decoration: none;
