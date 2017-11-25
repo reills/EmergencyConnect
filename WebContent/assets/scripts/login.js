@@ -40,7 +40,7 @@ $(document).ready(function() {
                 $("#col-no1").attr("class", "col-md-4");
                 $("#col-no2").attr("class", "col-md-4");
 
-                getUsersFriends($('#loginUsername').val());
+                getUsersFriends();
                 if (Cookies.get('username') != params.username){
                 	Cookies.set('username', params.username);
                 	Cookies.set('password', params.password);
@@ -73,7 +73,7 @@ $(document).ready(function() {
                 $("#registerButton").hide();
                 $("#welcomeMessage").html("Welcome, " + params.username);
                 $("#welcomeMessage").show();
-                getUsersFriends($('#registerUsername').val());
+                //getUsersFriends($('#registerUsername').val());
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
                 console.log("fail");
