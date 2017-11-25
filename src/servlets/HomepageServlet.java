@@ -60,7 +60,7 @@ public class HomepageServlet extends HttpServlet {
 		databaseInstance = new DatabaseServlet();
 		//RESPONSE writes all User FRIENDS, for "username" 
 		if( searchType.equals("retrieveFriends") ) {
-			System.out.println("Preparing to display current user's friends");
+			System.out.println("Retrieving all " + currentUser + "'s friends");
 			databaseInstance.loadAllUsers();
 			int userID = databaseInstance.getUserID(currentUser);
 	
@@ -114,20 +114,26 @@ public class HomepageServlet extends HttpServlet {
 	public ArrayList<User> getUserFriends(int userId ) {
 		ArrayList<User> userFriends = new ArrayList<User>();
 		
-		try {
-			databaseResults = statement.executeQuery("SELECT * From Relationship WHERE User_One_ID='" +  userId + "'");
-			while( databaseResults.next() ) {
-//				int friendID = databaseResults.getInt("User_Two_ID");
-				int friendID = databaseResults.getInt(2);
-				
-				User tempFriend = databaseInstance.getUser(friendID);
-				System.out.println(friendID);
-				userFriends.add(tempFriend);
-			}
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
+		if( databaseInstance.getUser(userId) == null ) {
+			System.out.println("Looking for friends of user id" + userId + ". This user does not exist in the database");
 		}
+		else { 
+			System.out.println("Getting friends of: " + databaseInstance.getUser(userId).getFullName());
+			try {
+				databaseResults = statement.executeQuery("SELECT * From Relationship WHERE User_One_ID='" +  userId + "'");
+				while( databaseResults.next() ) {
+					int friendID = databaseResults.getInt(2);
+					
+					User tempFriend = databaseInstance.getUser(friendID);
+					//System.out.println(friendID);
+					userFriends.add(tempFriend);
+				}
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
 	return userFriends;
 	}
 	

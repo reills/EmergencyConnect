@@ -13,6 +13,7 @@ public class Server {
 			System.out.println("Binding to port " + port);
 			ServerSocket ss = new ServerSocket(port);
 			System.out.println("Bound to port " + port);
+			
 			serverThreads = new Vector<ServerThread>();
 			while(true) {
 				Socket s = ss.accept(); // blocking

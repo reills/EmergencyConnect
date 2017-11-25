@@ -3,8 +3,8 @@
  */
 // Open and close login form
 $("#searchClose").click(function() {
-	getUsersFriends(Cookies.get("username"));
 	$("#searchModal").hide();
+	getUsersFriends();
    
 })
 
@@ -123,49 +123,103 @@ function follow(followeeUsername,id){
 
 
 //Retrieve logged in users friends from the database once user logs in
-function getUsersFriends(userName) {
-    var params = {
-        username: userName,
-        inputType: "retrieveFriends"
-    };    
-    
-    $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
-    	$("#friendsList").html("");
-    	var friendsJSON = responseJson;
-    	
-    	if( jQuery.isEmptyObject( friendsJSON) )  {
-	    	console.log(friendsJSON);
-	    	 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
-    	} else {
-    	 	console.log(friendsJSON);
-    	 	
-    	 	
-    		var $ul = $("<div id='friendObjects' class='container-fluid' >").appendTo($("#friendsList"));
-	    	for (var i=0; i<friendsJSON.length; i++){
-	    		
-	    		console.log(friendsJSON[i]);
-	    		console.log(friendsJSON[i].status);
-	    		
-	    	 	var $divRow = $("<div 'class=row'>");
-	    	 	($ul).append($divRow);
-	    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
-	    	 	
-	    		if( friendsJSON[i].status == "pending") {
-	    			($divRow).append("<button id='pending_status'> Status Pending... </button");
-	    		}
-	    		else if(friendsJSON[i].status == "notsafe" ) {
-	    			($divRow).append("<button id='danger_status'>  Not Safe  </button");
-	    		}else {
-	    			($divRow).append("<button id='safe_status'> Safe </button");
-	    		}
-	    		($divRow).append("</div>");
-	    	}
-	    	($ul).append("</div>");
-    	}
- 
-    });
+function getUsersFriends() {
+	    var params = {
+	        username: $('#loginUsername').val(),
+	        inputType: "retrieveFriends"
+	    };    
+	    if( params.username == null ) {
+			console.log("blank username");
+		}
+	    else {
+	    		console.log("username: "+ $('#loginUsername').val());
+		    $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+		    	$("#friendsList").html("");
+		    	var friendsJSON = responseJson;
+		    	
+		    	if( jQuery.isEmptyObject( friendsJSON) )  {
+			    	console.log(friendsJSON);
+			    	 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
+		    	} else {
+		    	 	console.log(friendsJSON);
+		    	 	
+		    	 	
+		    		var $ul = $("<div id='friendObjects' class='container-fluid' >").appendTo($("#friendsList"));
+			    	for (var i=0; i<friendsJSON.length; i++){
+			    		
+			    		console.log(friendsJSON[i]);
+			    		console.log(friendsJSON[i].status);
+			    		
+			    	 	var $divRow = $("<div 'class=row'>");
+			    	 	($ul).append($divRow);
+			    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
+			    	 	
+			    		if( friendsJSON[i].status == "pending") {
+			    			($divRow).append("<button id='pending_status'> Status Pending... </button");
+			    		}
+			    		else if(friendsJSON[i].status == "notsafe" ) {
+			    			($divRow).append("<button id='danger_status'>  Not Safe  </button");
+			    		}else {
+			    			($divRow).append("<button id='safe_status'> Safe </button");
+			    		}
+			    		($divRow).append("</div>");
+			    	}
+			    	($ul).append("</div>");
+		    	}
+		 
+		    });
+	    }
 }
 
+	//refreshes the friendslist, currenlty set to evey 5 seconds
+	setInterval(function() {
+	    var params = {
+	        username: $('#loginUsername').val(),
+	        inputType: "retrieveFriends"
+	    };    
+	    
+	    if( params.username == "" ) {
+			console.log("blank username");
+		}
+	    else {
+	    		console.log("username: "+  $('#loginUsername').val());
+		    $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+		    	$("#friendsList").html("");
+		    	var friendsJSON = responseJson;
+		    	
+		    	if( jQuery.isEmptyObject( friendsJSON) )  {
+			    	console.log(friendsJSON);
+			    	 $("#friendsList").html(" <em> No followers to display. Add followers by searching for them! </em>");
+		    	} else {
+		    	 	console.log(friendsJSON);
+		    	 	
+		    	 	
+		    		var $ul = $("<div id='friendObjects' class='container-fluid' >").appendTo($("#friendsList"));
+			    	for (var i=0; i<friendsJSON.length; i++){
+			    		
+			    		console.log(friendsJSON[i]);
+			    		console.log(friendsJSON[i].status);
+			    		
+			    	 	var $divRow = $("<div 'class=row'>");
+			    	 	($ul).append($divRow);
+			    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
+			    	 	
+			    		if( friendsJSON[i].status == "pending") {
+			    			($divRow).append("<button id='pending_status'> Status Pending... </button");
+			    		}
+			    		else if(friendsJSON[i].status == "notsafe" ) {
+			    			($divRow).append("<button id='danger_status'>  Not Safe  </button");
+			    		}else {
+			    			($divRow).append("<button id='safe_status'> Safe </button");
+			    		}
+			    		($divRow).append("</div>");
+			    	}
+			    	($ul).append("</div>");
+		    	}
+		 
+		    });
+	    }
+	}, 5000);
 
 
 

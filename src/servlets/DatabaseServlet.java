@@ -60,7 +60,7 @@ public class DatabaseServlet extends HttpServlet {
 	/*make sure the user exsits and that his password matches that in the database
 	 * Returns true for good login in, and false for bad login. */
 	public boolean verifyUser(String enteredUsername, String enteredPassword) {
-
+		establishConnection();
 		try {
 			if( enteredUsername != null &&  enteredUsername.length() > 0 ) {
 				databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username='" +  enteredUsername + "'");
@@ -93,7 +93,7 @@ public class DatabaseServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 		
-		establishConnection();
+		//establishConnection();
 		System.out.println("===========called DatabaseServlet==========");
 		
 		String enteredUsername = request.getParameter("username");
@@ -162,16 +162,17 @@ public class DatabaseServlet extends HttpServlet {
 		}
 		
 		getAllFriends();
-		closeSQLObjects();
+		//closeSQLObjects();
 	}
 	
 	//put all the user's friends into a list, and assign it to the userID, in the friendList map
 	public void getAllFriends() {
 		try {
-			establishConnection();
+			//establishConnection();
 			ResultSet databaseResults1;
 			databaseResults1 = statement.executeQuery("SELECT * FROM Relationship");
       
+			System.out.println("Loading *all* friends... " );
 			while(databaseResults1.next()) { //while more rows, it goes to the next row at rs.next
 				int userID = databaseResults1.getInt("User_One_ID");
 				int friendID = databaseResults1.getInt("User_Two_ID");
@@ -184,7 +185,7 @@ public class DatabaseServlet extends HttpServlet {
 					friendsList.put(userID, usersFriends);
 				}
 			
-				System.out.println("Getting *all* friends... user ID: " + userID + ", friendID " + friendID);
+				//System.out.println("Getting *all* friends... user ID: " + userID + ", friendID " + friendID);
 			}
 			System.out.println("End of getAllFriends()");
 		} catch (SQLException e) {
@@ -206,62 +207,47 @@ public class DatabaseServlet extends HttpServlet {
 		}
 	}
 	
-	/* Creates all the user information using the servlet request objects. 
+	/* Adds user to the database if their chosen user-name is not already taken.
 	 * */
 	public void registerUser(HttpServletRequest request, HttpServletResponse response) {
+		establishConnection();
 		
 		String enteredUsername = request.getParameter("username");
 		String enteredPassword = request.getParameter("password");
 		
-		if(usernameMap == null || usernameMap.isEmpty()) {
-			loadAllUsers();
-		}
-		
-		if(!userExists(enteredUsername)){
+		try {
+			databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username = '" + enteredUsername + "'");
 			
-			try{
-				response.getWriter().write("userRegistered");
-			}catch(IOException ioe){
-				System.out.println(ioe.getMessage());
-			}
-			// All info from registration form. 
-			int userID =0; //databse keeps track of userId's using auto_increment.
-			String fName = request.getParameter("firstName");
-			String lName = request.getParameter("lastName");
-			String email = request.getParameter("email");
-			String fullName = fName + " " + lName;
-			String phoneNumber = request.getParameter("phoneNumber");
-			
-			System.out.println("Attempting to add: firstname: " + fName + ", lastname: " + lName + ", email: " +
-			fullName + ", phoneNumber: " + phoneNumber + ", username: " + enteredUsername + ", password: " + enteredPassword 
-			+ ", UserID: " + userID);
-
-			String userStatus = "pending";
-			String salt =  LoginHash.getSalt();
-			String hash =  LoginHash.generateHash(salt + enteredPassword);
-			
-			 // add User to the database (the insert statement returns the ID of newly added element)
-			try { 
-				statement.executeUpdate("INSERT INTO User (Name, Username, UserStatus, Salt, Hash, Email, PhoneNumber ) VALUES ( '" + fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
-						salt + "','" + hash + "','" + email + "','" + phoneNumber + "')", Statement.RETURN_GENERATED_KEYS);
-				ResultSet rs = statement.getGeneratedKeys();
-				rs.next();
-				userID = rs.getInt(1);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			User tempUser = new User(fullName, enteredUsername, hash, salt, userID, userStatus, phoneNumber, email );
-			usernameMap.put(enteredUsername, tempUser);
-			userIdMap.put(userID, tempUser);
-		}else{
-			try{
+			if( databaseResults.next() ) { 
 				response.getWriter().write("userExists");
-			}catch(IOException ioe){
-				System.out.println(ioe.getMessage());
 			}
+			else {
+				response.getWriter().write("userRegistered");
 			
-		}
+				// All info from registration form. 
+				String fName = request.getParameter("firstName");
+				String lName = request.getParameter("lastName");
+				String email = request.getParameter("email");
+				String fullName = fName + " " + lName;
+				String phoneNumber = request.getParameter("phoneNumber");
+				
+				System.out.println("Attempting to add: firstname: " + fName + ", lastname: " + lName + ", email: " +
+				fullName + ", phoneNumber: " + phoneNumber + ", username: " + enteredUsername + ", password: " + enteredPassword );
+
+				String userStatus = "pending";
+				String salt =  LoginHash.getSalt();
+				String hash =  LoginHash.generateHash(salt + enteredPassword);
+				
+				 // add User to the database (the insert statement returns the ID of newly added element)
+				statement.executeUpdate("INSERT INTO User (Name, Username, UserStatus, Salt, Hash, Email, PhoneNumber ) VALUES ( '" + fullName + "','" + enteredUsername + "','" +  userStatus + "','" + 
+							salt + "','" + hash + "','" + email + "','" + phoneNumber + "')", Statement.RETURN_GENERATED_KEYS);
+			}
+		} 
+		catch (IOException | SQLException e1 ) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		closeSQLObjects();
 	}
 	
 	/*
@@ -288,7 +274,7 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/*returns a user from a given id, returns null if id is not found */
 	public User getUser(int id) {
-		System.out.println(userIdMap.get(id));
+		//System.out.println(userIdMap.get(id));
 		return userIdMap.get(id);
 	}
 	
