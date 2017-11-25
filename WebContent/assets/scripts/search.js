@@ -143,8 +143,8 @@ function getUsersFriends() {
 		    	} else {
 		    	 	console.log(friendsJSON);
 		    	 	
-		    	 	
-		    		var $ul = $("<div id='friendObjects' class='container-fluid' >").appendTo($("#friendsList"));
+		    	 	 $("#friendsList").html(" <div class='friendWrapper'>      <div class='friendColName'><strong>Username</strong></div>      <div class='friendColButton'><strong>Status</strong></div>     <div class='friendColButton'><strong>Unfollow</strong></div>     </div> ");
+		    		var $ul = $("<div id='friendObjects' class='friendWrapper' >").appendTo($("#friendsList"));
 			    	for (var i=0; i<friendsJSON.length; i++){
 			    		
 			    		console.log(friendsJSON[i]);
@@ -153,20 +153,21 @@ function getUsersFriends() {
 			    	 	var $divRow = $("<div 'class=row' id='friend"+friendsJSON[i].userId +"' >");
 			    	 	($ul).append($divRow);
 			    	 	
-			    	 	($divRow).append("<p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p>");
+			    	 	($divRow).append(" <div class='friendColName'> <p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p> </div>");
 			    	 	
 			    		if( friendsJSON[i].status == "pending") {
-			    			($divRow).append("<button id='pending_status'> Status Pending... </button");
+			    			($divRow).append("<div class='friendColButton'> <button id='pending_status'> Pending... </button> </div> ");
 			    		}
 			    		else if(friendsJSON[i].status == "notsafe" ) {
-			    			($divRow).append("<button id='danger_status'>  Not Safe  </button");
+			    			($divRow).append("<div class='friendColButton'> <button id='danger_status'>  Not Safe  </button> </div>");
 			    		}else {
-			    			($divRow).append("<button id='safe_status'> Safe </button");
+			    			($divRow).append("<div class='friendColButton'> <button id='safe_status'> Safe </button> </div>");
 			    		}
 			    		
-			    		($divRow).append("<button id='removeFriend'" + friendsJSON[i].userId + "' onclick=\"remove('"  +  params.username + "'," + friendsJSON[i].userId + ")\" > Remove </button");
+			    		($divRow).append("<div class='friendColButton'> <button id='removeFriend'" + friendsJSON[i].userId + "' onclick=\"remove('"  +  params.username + "'," + friendsJSON[i].userId + ")\" > Remove </button> </div>");
 			    		($divRow).append("</div>");
 			    	}
+			    	
 			    	($ul).append("</div>");
 		    	}
 		 
