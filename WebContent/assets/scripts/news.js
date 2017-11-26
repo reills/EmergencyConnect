@@ -28,8 +28,9 @@ function fetchAP() {
                 url = JSON.stringify(currentArticle.url);
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
                 description = clean(currentArticle.description);
-                cards.push(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
-                console.log(cards);
+                // cards.push(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
+                // console.log(cards);
+                $("#news-feed").append(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
             }
         }
     });
@@ -99,7 +100,7 @@ function generateCard(title, url, subtitle, content) {
 
 function printNews(num) {
     for (var i = 0; i < num; i++) {
-        $("#newsFeed").append(cards.pop());
+        $("#news-feed").append(cards.pop());
     }
 }
 
