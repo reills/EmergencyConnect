@@ -149,3 +149,7 @@ img {
 p.input { 
 	vertical-align: text-bottom; 
 }
+
+#accountWelcome {
+	margin: 0 !important;
+}

@@ -4,7 +4,12 @@ var lat = 0;
 var long = 0;
 var city = "Flavortown";
 
+function loadTwitterCard() {
+      $("#twitterCard").html("<a class='twitter-timeline' data-widget-id='930907791878864896' href='https://twitter.com/search?q=USC'>Tweets about USC</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>");
+}
+
 function fetchLocation() {
+    console.log("Fetching location...");
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(fetchLocationServices);
     } else {
