@@ -10,6 +10,7 @@ const nyt_news_element = "#NYTNews";
 const all_news_element = "#allNews";
 
 var cards = [];
+const maxArticles = 5;
 
 function fetchAP() {
     console.log("Fetching news from Associated Press...");
@@ -21,7 +22,7 @@ function fetchAP() {
             $(ap_news_element).html("");
 
             articles = response.articles;
-            for (var i = 0; i < articles.length && i < 3; i++) {
+            for (var i = 0; i < articles.length && i < maxArticles; i++) {
                 currentArticle = articles[i];
                 title = JSON.stringify(currentArticle.title);
                 url = JSON.stringify(currentArticle.url);
@@ -29,7 +30,6 @@ function fetchAP() {
                 description = clean(currentArticle.description);
                 cards.push(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
                 console.log(cards);
-                $(ap_news_element).append(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
             }
         }
     });
@@ -45,12 +45,13 @@ function loadAllNewsTopic(topic) {
             $(all_news_element).html("");
 
             articles = response.articles;
-            for (var i = 0; i < articles.length && i < 3; i++) {
+            for (var i = 0; i < articles.length && i < maxArticles; i++) {
                 currentArticle = articles[i];
                 title = currentArticle.title;
                 url = currentArticle.url;
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
-                $(ap_news_element).append(generateCard(title, url, topic.replace(/%20/g," "), img + "<p>" + clean(description) + "</p>"));
+                cards.push(generateCard(title, url, topic.replace(/%20/g," "), img + "<p>" + clean(description) + "</p>"));
+                console.log(cards);
             }
         }
     });
@@ -67,7 +68,7 @@ function fetchNYT(city) {
             console.log(response);
 
             articles = response.response.docs;
-            for (var i = 0; i < articles.length && i < 3; i++) {
+            for (var i = 0; i < articles.length && i < maxArticles; i++) {
 
                 currentArticle = articles[i];
                 if (currentArticle.multimedia.length != 0) {
@@ -76,7 +77,8 @@ function fetchNYT(city) {
                     webURL = webURL.substring(1, webURL.length - 1);
                     imgURL = "https://www.nytimes.com/" + clean(currentArticle.multimedia[0].url).slice(1, -1);
                     content = generateContent(imgURL, currentArticle.snippet);
-                    $(nyt_news_element).append(generateCard(headline, webURL, "The New York Times", content));
+                    cards.push(generateCard(headline, webURL, "The New York Times", content));
+                console.log(cards);
                 }
 
             }
@@ -93,6 +95,12 @@ function generateCard(title, url, subtitle, content) {
                     "<div class='content'>" + content + "</div>" +
                 "</div>";
     return card;    
+}
+
+function printNews(num) {
+    for (var i = 0; i < num; i++) {
+        $("#newsFeed").append(cards.pop());
+    }
 }
 
 // String imgURL, json body
