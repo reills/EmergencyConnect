@@ -95,20 +95,8 @@ function fetchNYT(city) {
                 webURL = JSON.stringify(currentArticle.web_url);
                 webURL = webURL.substring(1, webURL.length - 1);
                 imgURL = JSON.stringify(currentArticle.multimedia[0].url);
-                imgURL = imgURL.slice(1, -1);
-                title =
-                    $(nyt_news_element).append(
-                        "<div class='card'>" +
-                            "<div class='header'>" +
-                                "<h4 class='title'>" +
-                                "<a href='" + webURL + "'>" + JSON.stringify(currentArticle.headline.main) + "</a>" +
-                                "</h4>" + "<p class='category'>New York Times</p>" + "</div>" +
-                                "<div class='content'>" +
-                                    "<img height='120px' src='https://www.nytimes.com/" + imgURL + "'>" +
-                                    "<p>" + JSON.stringify(currentArticle.snippet) + "</p>" +
-                            "</div>" +
-                        "</div>"
-                    );
+                imgURL = "https://www.nytimes.com/" + imgURL.slice(1, -1);
+                $(nyt_news_element).append(generateCard(currentArticle.headline.main,webURL,"The New York Times", generateContent(imgURL, currentArticle.snippet)));
             }
         }
     }).fail(function(err) {
@@ -116,8 +104,24 @@ function fetchNYT(city) {
     });
 }
 
+
+function generateCard(title, url, subtitle, content) {
+    var card = "<div class='card'>" +
+                    "<div class='header'>" +
+                        "<h4 class='title'>" +"<a href='" + url + "'>" + clean_stringify(title) + "</a>" + "</h4>" + 
+                        "<p class='category'>" + subtitle + "</p>" +
+                    "</div>" +
+                    "<div class='content'>" + content + "</div>" +
+                "</div>";
+    return card;    
+}
+
+function generateContent(imgURL, body) {
+    var content =   "<img height='120px' src='" + imgURL + "'>" +
+                    "<p>" + JSON.stringify(body) + "</p>"
+    return content;
+}
+
 function clean_stringify(input_string) {
     return JSON.stringify(input_string).replace(/\\/g, "");
 }
-
-// function generateCard(title, titleURL, subtitle, )
