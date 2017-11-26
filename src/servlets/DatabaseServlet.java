@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.sun.javafx.webkit.KeyCodeMap.Entry;
 
 import objects.*;
@@ -59,8 +60,9 @@ public class DatabaseServlet extends HttpServlet {
 	
 	/*make sure the user exsits and that his password matches that in the database
 	 * Returns true for good login in, and false for bad login. */
-	public boolean verifyUser(String enteredUsername, String enteredPassword) {
+	public String verifyUser(String enteredUsername, String enteredPassword) {
 		establishConnection();
+		String name = "";
 		try {
 			if( enteredUsername != null &&  enteredUsername.length() > 0 ) {
 				databaseResults = statement.executeQuery("SELECT * FROM User WHERE Username='" +  enteredUsername + "'");
@@ -77,9 +79,8 @@ public class DatabaseServlet extends HttpServlet {
 					
 					
 					if( databaseHash.equals(tempHash)) {
+						name = databaseResults.getString("Name");
 						System.out.println("Username and password correct");
-						loadAllUsers();
-						return true;
 					}
 					
 				}
@@ -88,7 +89,7 @@ public class DatabaseServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		return false;
+		return name;
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
@@ -102,8 +103,10 @@ public class DatabaseServlet extends HttpServlet {
 		
 		if( checkingAccountDetails.equals("login") ) {
 			System.out.println("goingToLoginVerfiication");
-			if(  verifyUser( enteredUsername, enteredPassword ) ) {
-				response.getWriter().write("VALID");
+			String username = verifyUser( enteredUsername, enteredPassword );
+			
+			if(  !username.equals("") ) { //first name
+				response.getWriter().write( username.substring(0, username.indexOf(' ')) );
 			} 
 			else { 
 				response.getWriter().write("FAILURE");
@@ -128,9 +131,47 @@ public class DatabaseServlet extends HttpServlet {
 			int friendID = Integer.parseInt(friendId);
 			int userId = usernameMap.get(username).getUserId();
 			removeUserFriend(userId, friendID);
+		} else if( checkingAccountDetails.equals("getUserInformation")) {
+			loadAllUsers();
+			
+			String username = request.getParameter("username");
+			User tempUser = usernameMap.get(username);
+			String json = new Gson().toJson(tempUser);
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+		} else if( checkingAccountDetails.equals("updateInfo")) { 
+			loadAllUsers();
+			
+		     String name =  request.getParameter("fullName");
+			 String email =  request.getParameter("email");
+			 String password = request.getParameter("password");
+			 String phoneNumber = request.getParameter("phoneNumber");
+			 String username = request.getParameter("username");
+			 
+			 String userSalt = usernameMap.get(username).getSalt();
+			 
+			updateProfile(userSalt, name, email, password, phoneNumber, username );
+			
 		}
-		
 	closeSQLObjects();
+	}
+	
+	public void updateProfile( String userSalt, String name, String email, String password, String phoneNumber, String username ) {
+		establishConnection();
+		try {
+			statement.executeUpdate("UPDATE User SET Name='" + name + "' WHERE Username='" + username + "'");
+			statement.executeUpdate("UPDATE User SET Email='" + email + "' WHERE Username='" + username + "'");
+			statement.executeUpdate("UPDATE User SET PhoneNumber='" + phoneNumber + "' WHERE Username='" + username + "'");
+			
+			String saltyPassword = userSalt + password;
+			String tempHash = LoginHash.generateHash( saltyPassword );
+			statement.executeUpdate("UPDATE User SET Hash='" + tempHash + "' WHERE Username='" + username + "'");
+	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/* Creating all the user objects with all their shit, like name/id etc. 

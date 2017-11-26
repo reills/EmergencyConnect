@@ -16,6 +16,59 @@
       $("#registerClose").click(function() {
           $("#registerModal").hide();
       })
+      $("#profileClose").click(function() {
+          $("#profileModal").hide();
+          $("#messageEdit").html("");
+      })
+  
+      $("#accountProfile").click(function() {
+    	  		var params = {
+    		        username: $("#accountProfile").text().substring(14),
+    		        inputType: "getUserInformation"
+    		    };   
+    	  		console.log("wants to change profile");
+    	  		
+    	  	 $.post("DatabaseServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+    	  		var friendsJSON = responseJson;
+ 		    	 
+    	  		var name = friendsJSON.fullName;
+    	  		var fullName = name.split(" ");
+    	  		var firstName = fullName[0];
+    	  		var lastName = fullName[1];
+    	  		
+    	  		 $('#editfName').val(firstName);
+    	  		 $('#editlName').val(lastName);
+    	  		 $('#editPassword').val("");
+    	  		 $('#editEmail').val(friendsJSON.email);
+    	  		 $('#editPhoneNumber').val(friendsJSON.phoneNumber);
+    	  		 
+    	  		$("#profileModal").show();
+    	  	
+    	  	});
+     });
+ 
+ 	$("#profileSubmit").click(function() {
+ 		console.log("clicked AppliedChanges to profile");
+ 		var firstName = $("#editfName").val(); 
+ 		var lastName = $("#editlName").val();
+ 		var wholeName = firstName + " " + lastName;
+ 		
+ 		var params = {
+		        fullName: wholeName,
+		        email:  $('#editEmail').val(),
+		        password:  $('#editPassword').val(),
+		        phoneNumber: $('#editPhoneNumber').val(),
+		        username: $("#accountProfile").text().substring(14),
+		        inputType: "updateInfo"
+		   };   
+	  		  		
+	  	 $.post("DatabaseServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
+	  		Cookies.set('password', params.password);
+	  		 $("#messageEdit").html("<font color='green'> Changes sucessful </font>");
+	  		$("#accountWelcome").html("Welcome, " + firstName );
+	  	
+	  	});
+ 	});
 
 //call database to check user's login credentials
 $(document).ready(function() {
@@ -28,13 +81,14 @@ $(document).ready(function() {
         $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
             console.log(responseText);
 
-            if (responseText == "VALID") {
+            if (responseText != "FAILURE") {
                 $("#loginButton").hide();
                 $("#loginModal").hide();
                 $("#registerButton").hide();
+                $("#accountWelcome").html("Welcome, " + responseText );
                 $("#accountMenu").show();
-                $("#welcomeMessage").html("Welcome, " + params.username);
-                $("#welcomeMessage").show();
+                
+                $("#accountProfile").html("Edit Profile, " + params.username);
                 $("#loggedInFeeds").show();
                 $("#checkinCard").show();
                 $("#col-no1").attr("class", "col-md-4");
@@ -53,6 +107,8 @@ $(document).ready(function() {
     });
 })
 
+
+
 //Calls database to register user, if username already taken, the user must choose another.
 $(document).ready(function() {
     $("#registerSubmit").click(function() {
@@ -68,12 +124,22 @@ $(document).ready(function() {
         $.post("DatabaseServlet", $.param(params), function(responseText) {
             console.log("calledPOST");
             if (responseText == 'userRegistered') {
+               
                 $("#loginButton").hide();
-                $("#registerModal").hide();
+                $("#loginModal").hide();
                 $("#registerButton").hide();
-                $("#welcomeMessage").html("Welcome, " + params.username);
-                $("#welcomeMessage").show();
-                //getUsersFriends($('#registerUsername').val());
+                $("#accountMenu").show();
+                $("#accountWelcome").html("Welcome, " + params.firstName );
+                
+                $("#registerModal").hide();
+                $("#accountProfile").html("Edit profile, " + params.username );
+                $("#accountProfile").show();
+                $("#loggedInFeeds").show();
+                $("#checkinCard").show();
+                $("#col-no1").attr("class", "col-md-4");
+                $("#col-no2").attr("class", "col-md-4");
+                
+             
             } else {
                 $("#messageRegister").html("<font color='red'>This username is already taken. Please choose another username.</font>");
                 console.log("fail");
@@ -93,18 +159,19 @@ function currentUserCookies(){
 		            inputType: "login"
 		        };
 		 $.post("DatabaseServlet", $.param(params), function(responseText) { // Execute Ajax GET request on URL of "DatabaseServlet" and execute the following function with Ajax response text...
-			 if (responseText == "VALID") {
+			 if (responseText != "FAILURE") {
 		                $("#loginButton").hide();
 		                $("#loginModal").hide();
 		                $("#registerButton").hide();
 		                $("#accountMenu").show();
-		                $("#welcomeMessage").html("Welcome, " + params.username);
-		                $("#welcomeMessage").show();
+		                $("#accountWelcome").html("Welcome, " + responseText);
+		                
+		                $("#accountProfile").html("Edit profile, " + params.username);
 		                $("#loggedInFeeds").show();
 		                $("#col-no1").attr("class", "col-md-4");
 		                $("#col-no2").attr("class", "col-md-4");
 
-		                getUsersFriends(params.username);
+		                getUsersFriends();
 		            } else {
 		                $('#messageDiv').html("<font color='red'>Username or password incorrect </font>");
 		                console.log("false");

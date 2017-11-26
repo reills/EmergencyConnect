@@ -36,6 +36,10 @@ public class User {
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
+	
+	public String getSalt() {
+		return this.salt;
+	}
 
 	public void setHash(String hash) {
 		this.hash = hash;

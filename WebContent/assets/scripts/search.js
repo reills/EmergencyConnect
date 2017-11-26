@@ -30,12 +30,11 @@ $('#searchbar').keydown(function(e) {
  function searchForUsers() {
 	 console.log($('#searchbar').val());
 	 var username;
-	 console.log($('#accountButton').text());
+	 console.log($("#accountProfile").text());
      var params = {
     		 	searchInput: $('#searchbar').val(),
              inputType: "searchResults",
-            	username: Cookies.get('username')
-            		//($('#accountButton').text()).substring(9)
+            	username: ($('#accountProfile').text()).substring(14)
      };
      console.log("username-" + params.username);
      console.log("searching for: " + params.searchInput);
@@ -117,7 +116,7 @@ function follow(followeeUsername,id){
 		       
 	        });
 	     
-        	console.log(($('#accountButton').text()).substring(9));
+        	console.log(($("#accountProfile").text()).substring(14));
 // 	       location.reload();
 }
 
@@ -125,14 +124,14 @@ function follow(followeeUsername,id){
 //Retrieve logged in users friends from the database once user logs in
 function getUsersFriends() {
 	    var params = {
-	        username: $("#welcomeMessage").text().substring(9),
+	        username: $("#accountProfile").text().substring(14),
 	        inputType: "retrieveFriends"
 	    };    
 	    if( params.username == "" ) {
 			console.log("blank username");
 		}
 	    else {
-	    		console.log("username: "+ $("#welcomeMessage").text().substring(9)  );
+	    		console.log("username: "+ $("#accountProfile").text().substring(14)  );
 		    $.post("HomepageServlet", $.param(params), function(responseJson) { // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response JSON...
 		    	$("#friendsList").html("");
 		    	var friendsJSON = responseJson;
@@ -143,7 +142,7 @@ function getUsersFriends() {
 		    	} else {
 		    	 	console.log(friendsJSON);
 		    	 	
-		    	 	 $("#friendsList").html(" <div class='friendWrapper'>      <div class='friendColName'><strong>Username</strong></div>      <div class='friendColButton'><strong>Status</strong></div>     <div class='friendColButton'><strong>Unfollow</strong></div>     </div> ");
+		    	 	 $("#friendsList").html(" <div class='friendWrapper'>      <div class='friendColName'><strong>Name</strong></div>      <div class='friendColButton'><strong>Status</strong></div>     <div class='friendColButton'><strong>Unfollow</strong></div>     </div> ");
 		    		var $ul = $("<div id='friendObjects' class='friendWrapper' >").appendTo($("#friendsList"));
 			    	for (var i=0; i<friendsJSON.length; i++){
 			    		
