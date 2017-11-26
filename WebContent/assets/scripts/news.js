@@ -44,8 +44,8 @@ function fetchAP() {
 function loadAllNewsTopic(topic) {
     console.log("Fetching news from all sources by topic...");
     $.ajax({
-        dataType: "json",
         url: "https://newsapi.org/v2/everything?q=" + topic + "&language=en&apiKey=" + news_api_key,
+        dataType: "json",
         success: function(response) {
             console.log(response);
             $(all_news_element).html("");
@@ -88,15 +88,16 @@ function fetchNYT(city) {
     }).done(function(response) {
         console.log(response);
         articles = response.response.docs;
-        for (var i = 0; i < articles.length; i++) {
+        for (var i = 0; i < articles.length && i < 5; i++) {
             currentArticle = articles[i];
             var webURL, imgURL;
             if (currentArticle.multimedia.length != 0) {
+                headline = currentArticle.headline.main;
                 webURL = JSON.stringify(currentArticle.web_url);
                 webURL = webURL.substring(1, webURL.length - 1);
                 imgURL = JSON.stringify(currentArticle.multimedia[0].url);
                 imgURL = "https://www.nytimes.com/" + imgURL.slice(1, -1);
-                $(nyt_news_element).append(generateCard(currentArticle.headline.main,webURL,"The New York Times", generateContent(imgURL, currentArticle.snippet)));
+                $(nyt_news_element).append(generateCard(headline,webURL,"The New York Times", generateContent(imgURL, currentArticle.snippet)));
             }
         }
     }).fail(function(err) {
