@@ -51,15 +51,12 @@ img {
 	width: 30%;
 }
 
-
-
 #removeFriend {
     background-color: #FFB2B2; /* light pink */
     text-align: center;
     color: black;
     text-decoration: none;
 }
-
 
 #safe_status {
     background-color: #4CAF50; /* Green */
@@ -110,7 +107,7 @@ img {
 
 
 /* Modal Content */
-.login-modal, .register-modal, .search-modal  {
+.login-modal, .register-modal, .search-modal, .profile-modal {
 	position: relative;
 	z-index: 1;
 	background: #FFFFFF;
@@ -121,7 +118,7 @@ img {
 	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-#loginSubmit, #registerSubmit {
+#loginSubmit, #registerSubmit, #profileSubmit {
 	background-color: #900; /* this is the purple color on line 461 of light-bootstrap changed it background-color: #9368e9 */
 	color: white;
 	padding: 14px 20px;
