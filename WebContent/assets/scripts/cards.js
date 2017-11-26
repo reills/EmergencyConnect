@@ -30,7 +30,8 @@ function fetchLocationServices(position) {
         success: function(response) {
             console.log("Google Reverse Geocoding API, city: ");
             console.log(response);
-            city = response.results[3].formatted_address;
+            city = response.results[3].formatted_address.split(",")[0];
+            fetchNYT(city + " Emergency");
         }
     });
 }

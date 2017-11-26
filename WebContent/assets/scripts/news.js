@@ -40,12 +40,12 @@ function fetchAP() {
     });
 }
 
-function fetchNYT() {
+function fetchNYT(city) {
     console.log("Fetching news from New York Times...");
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
         'api-key': nyt_api_key,
-        'q': "disaster"
+        'q': city
     });
 
     $.ajax({
