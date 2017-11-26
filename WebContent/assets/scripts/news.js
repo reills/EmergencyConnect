@@ -9,6 +9,8 @@ const ap_news_element = "#APNews";
 const nyt_news_element = "#NYTNews";
 const all_news_element = "#allNews";
 
+var cards = [];
+
 function fetchAP() {
     console.log("Fetching news from Associated Press...");
     $.ajax({
@@ -19,23 +21,15 @@ function fetchAP() {
             $(ap_news_element).html("");
 
             articles = response.articles;
-            for (var i = 0; i < articles.length; i++) {
+            for (var i = 0; i < articles.length && i < 3; i++) {
                 currentArticle = articles[i];
                 title = JSON.stringify(currentArticle.title);
                 url = JSON.stringify(currentArticle.url);
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
-                description = clean_stringify(currentArticle.description);
-                $(ap_news_element).append(
-                    "<div class='card'>" + 
-                        "<div class='header'>" + 
-                            "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + 
-                            "<p class='category'>Associated Press</p>" + 
-                        "</div>" + 
-                        "<div class='content'>" + 
-                            img + 
-                            "<p>" + description + "</p>" + 
-                        "</div>" + 
-                    "</div>");
+                description = clean(currentArticle.description);
+                cards.push(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
+                console.log(cards);
+                $(ap_news_element).append(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
             }
         }
     });
@@ -51,23 +45,12 @@ function loadAllNewsTopic(topic) {
             $(all_news_element).html("");
 
             articles = response.articles;
-            for (var i = 0; i < articles.length; i++) {
+            for (var i = 0; i < articles.length && i < 3; i++) {
                 currentArticle = articles[i];
-                title = JSON.stringify(currentArticle.title);
-                url = JSON.stringify(currentArticle.url);
+                title = currentArticle.title;
+                url = currentArticle.url;
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
-                description = clean_stringify(currentArticle.description);
-                $(ap_news_element).append(
-                    "<div class='card'>" + 
-                        "<div class='header'>" + 
-                            "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + 
-                            "<p class='category'>" + topic.replace(/%20/g," ") + "</p>" + 
-                        "</div>" + 
-                        "<div class='content'>" + 
-                            img + 
-                            "<p>" + description + "</p>" + 
-                        "</div>" + 
-                    "</div>");
+                $(ap_news_element).append(generateCard(title, url, topic.replace(/%20/g," "), img + "<p>" + clean(description) + "</p>"));
             }
         }
     });
@@ -75,54 +58,50 @@ function loadAllNewsTopic(topic) {
 
 function fetchNYT(city) {
     console.log("Fetching news from New York Times...");
-    var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-    url += '?' + $.param({
-        'api-key': nyt_api_key,
-        'q': city
-    });
 
     $.ajax({
-        url: url,
+        url: "https://api.nytimes.com/svc/search/v2/articlesearch.json?" + $.param({'api-key': nyt_api_key, 'q': city }),
         dataType: "json",
-        method: 'GET',
-    }).done(function(response) {
-        console.log(response);
-        articles = response.response.docs;
-        for (var i = 0; i < articles.length && i < 5; i++) {
-            currentArticle = articles[i];
-            var webURL, imgURL;
-            if (currentArticle.multimedia.length != 0) {
-                headline = currentArticle.headline.main;
-                webURL = JSON.stringify(currentArticle.web_url);
-                webURL = webURL.substring(1, webURL.length - 1);
-                imgURL = JSON.stringify(currentArticle.multimedia[0].url);
-                imgURL = "https://www.nytimes.com/" + imgURL.slice(1, -1);
-                $(nyt_news_element).append(generateCard(headline,webURL,"The New York Times", generateContent(imgURL, currentArticle.snippet)));
+        method: "GET",
+        success: function(response) {
+            console.log(response);
+
+            articles = response.response.docs;
+            for (var i = 0; i < articles.length && i < 3; i++) {
+
+                currentArticle = articles[i];
+                if (currentArticle.multimedia.length != 0) {
+                    headline = currentArticle.headline.main;
+                    webURL = JSON.stringify(currentArticle.web_url);
+                    webURL = webURL.substring(1, webURL.length - 1);
+                    imgURL = "https://www.nytimes.com/" + clean(currentArticle.multimedia[0].url).slice(1, -1);
+                    content = generateContent(imgURL, currentArticle.snippet);
+                    $(nyt_news_element).append(generateCard(headline, webURL, "The New York Times", content));
+                }
+
             }
         }
-    }).fail(function(err) {
-        throw err;
     });
 }
-
 
 function generateCard(title, url, subtitle, content) {
     var card = "<div class='card'>" +
                     "<div class='header'>" +
-                        "<h4 class='title'>" +"<a href='" + url + "'>" + clean_stringify(title) + "</a>" + "</h4>" + 
-                        "<p class='category'>" + subtitle + "</p>" +
+                        "<h4 class='title'>" +"<a href='" + clean(url) + "'>" + clean(title) + "</a>" + "</h4>" + 
+                        "<p class='category'>" + clean(subtitle) + "</p>" +
                     "</div>" +
                     "<div class='content'>" + content + "</div>" +
                 "</div>";
     return card;    
 }
 
+// String imgURL, json body
 function generateContent(imgURL, body) {
     var content =   "<img height='120px' src='" + imgURL + "'>" +
-                    "<p>" + JSON.stringify(body) + "</p>"
+                    "<p>" + clean(body) + "</p>"
     return content;
 }
 
-function clean_stringify(input_string) {
+function clean(input_string) {
     return JSON.stringify(input_string).replace(/\\/g, "");
 }
