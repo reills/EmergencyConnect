@@ -7,6 +7,7 @@ const nyt_api_key = "888fd10628734e11810b44d6df4480f3";
 
 const ap_news_element = "#APNews";
 const nyt_news_element = "#NYTNews";
+const all_news_element = "#allNews";
 
 function fetchAP() {
     console.log("Fetching news from Associated Press...");
@@ -29,6 +30,38 @@ function fetchAP() {
                         "<div class='header'>" + 
                             "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + 
                             "<p class='category'>Associated Press</p>" + 
+                        "</div>" + 
+                        "<div class='content'>" + 
+                            img + 
+                            "<p>" + description + "</p>" + 
+                        "</div>" + 
+                    "</div>");
+            }
+        }
+    });
+}
+
+function loadAllNewsTopic(topic) {
+    console.log("Fetching news from all sources by topic...");
+    $.ajax({
+        dataType: "json",
+        url: "https://newsapi.org/v2/everything?q=" + topic + "&language=en&apiKey=" + news_api_key,
+        success: function(response) {
+            console.log(response);
+            $(all_news_element).html("");
+
+            articles = response.articles;
+            for (var i = 0; i < articles.length; i++) {
+                currentArticle = articles[i];
+                title = JSON.stringify(currentArticle.title);
+                url = JSON.stringify(currentArticle.url);
+                img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
+                description = clean_stringify(currentArticle.description);
+                $(ap_news_element).append(
+                    "<div class='card'>" + 
+                        "<div class='header'>" + 
+                            "<h4 class='title'>" + "<a href=" + url + ">" + title + "<a/></h4>" + 
+                            "<p class='category'>" + topic.replace(/%20/g," ") + "</p>" + 
                         "</div>" + 
                         "<div class='content'>" + 
                             img + 
@@ -86,3 +119,5 @@ function fetchNYT(city) {
 function clean_stringify(input_string) {
     return JSON.stringify(input_string).replace(/\\/g, "");
 }
+
+// function generateCard(title, titleURL, subtitle, )
