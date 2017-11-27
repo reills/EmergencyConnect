@@ -21,11 +21,21 @@ $("#local-news-card").click(function() {
 	    loadTopic(city.replace(" ", "%20") + "%20Emergency");
 		$("#local-news-card").parent().fadeOut(400);	
 	}
-})
+});
 
 $("#nyt-news-card").click(function() {
 	if (city != "Flavortown") {
 	    loadNYT(city + " Emergency");
 		$("#nyt-news-card").parent().fadeOut(400);
 	}
-})
+});
+
+$("#custom-topic-submit").click(function() {
+	topic = $("#custom-topic-input").val();
+	console.log("Topic: " + topic);
+	if (topic != "") {
+	    loadNYT(topic.replace(/ /g,"%20") + " Emergency");
+	    loadTopic(topic.replace(/ /g,"%20") + " Emergency");
+		$("#custom-topic-card").parent().fadeOut(400);
+	}
+});
