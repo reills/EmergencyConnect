@@ -30,7 +30,6 @@
         currentUserCookies();
         loadTwitterCard();
         loadAP();
-        fetchLocation();
       $("#landingModal").modal('show');
     });
 
@@ -54,9 +53,46 @@
         <div class="modal-body">
           <div class="container-fluid">
             <div class="content">
+
+              <div class="row">
+
+                <div class="col-md-3" style="display: none">
+                  <a href="#" id="nyt-news-card">
+                    <div class="card">
+                      <img class="image" src="https://pbs.twimg.com/profile_images/905479981459013637/a6BbKh4k.jpg">
+                      <div class="subtitle">The New York Times</div>
+                    </div>
+                  </a>
+                </div>
+
+                <div class="col-md-3" style="display: none">
+                  <a href="#" id="local-news-card">
+                    <div class="card">
+                      <img class="image" src="https://tctechcrunch2011.files.wordpress.com/2013/04/ap_rgb.png">
+                      <div class="subtitle">News Nearby</div>
+                    </div>
+                  </a>
+                </div>
+
+                <div class="col-md-3">
+                  <a href="#" id="enable-location-card">
+                    <div class="card">
+                      <img class="image" src="https://techhelpkb.com/wp-content/uploads/2016/07/mac-location-services.png">
+                      <div class="subtitle">Enable Location Services</div>
+                    </div>
+                  </a>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
               <style type="text/css">
                     .modal-dialog {
-                      width: 80% !important;
+                      width: 40% !important;
                     }
 
                     .card .image {
@@ -81,46 +117,8 @@
 
               </style>
 
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="card selected">
-                    <img class="image" src="https://pbs.twimg.com/profile_images/905479981459013637/a6BbKh4k.jpg">
-
-                    <div class="subtitle">
-                      The New York Times
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="col-md-3">
-                  <div class="card">
-                    <img class="image" src="https://tctechcrunch2011.files.wordpress.com/2013/04/ap_rgb.png">
-
-                    <div class="subtitle">
-                      Associated Press
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="col-md-3">
-                  <div class="card">
-                    <img class="image" src="https://tctechcrunch2011.files.wordpress.com/2013/04/ap_rgb.png">
-
-                    <div class="subtitle">
-                      Associated Press
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
         <div class="modal-footer">
-          <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> <button class="btn btn-primary" data-dismiss="modal" type="button">Save Changes</button>
+          <button class="btn btn-primary" data-dismiss="modal" type="button">Continue</button>
         </div>
       </div>
     </div>

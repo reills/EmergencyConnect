@@ -4,6 +4,11 @@ var lat = 0;
 var long = 0;
 var city = "Flavortown";
 
+function loadTwitterCard() {
+    // var cityName = city.split(",")[0].replace(" ","_");
+    $("#twitterCard").html("<a class='twitter-timeline' href='https://twitter.com/search?q=Los%20Angeles' data-widget-id='934751764481376256'>Tweets about Los Angeles</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>");
+}
+
 function fetchLocation() {
     console.log("Fetching location...");
     if (navigator.geolocation) {
@@ -11,11 +16,6 @@ function fetchLocation() {
     } else {
         // Not supported
     }
-}
-
-function loadTwitterCard() {
-    // var cityName = city.split(",")[0].replace(" ","_");
-    $("#twitterCard").html("<a class='twitter-timeline' href='https://twitter.com/search?q=Los%20Angeles' data-widget-id='934751764481376256'>Tweets about Los Angeles</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>");
 }
 
 function fetchLocationServices(position) {
@@ -29,8 +29,6 @@ function fetchLocationServices(position) {
         success: function(response) {
             // console.log(response);
             city = response.results[3].formatted_address.split(",")[0];
-            loadNYT(city + " Emergency");
-            loadTopic(city.replace(" ", "%20") + "%20Emergency");
         }
     });
 }
