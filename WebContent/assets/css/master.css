@@ -153,3 +153,8 @@ p.input {
 #accountWelcome {
 	margin: 0 !important;
 }
+
+#loggedInFeeds > div:nth-child(1) {
+	padding-bottom: 30px !important;
+    margin-bottom: 10px !important;
+}
