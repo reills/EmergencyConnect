@@ -4,7 +4,6 @@ var lat = 0;
 var long = 0;
 var city = "Flavortown";
 
-
 function fetchLocation() {
     console.log("Fetching location...");
     if (navigator.geolocation) {
@@ -24,7 +23,6 @@ function fetchLocationServices(position) {
     long = position.coords.longitude;
     fetchWeather();
     initMap();
-
     $.ajax({
         dataType: "json",
         url: "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + long + "&key=" + google_key,
@@ -32,23 +30,25 @@ function fetchLocationServices(position) {
             // console.log(response);
             city = response.results[3].formatted_address.split(",")[0];
             loadNYT(city + " Emergency");
-            loadTopic(city.replace(" ","%20")+"%20Emergency");
+            loadTopic(city.replace(" ", "%20") + "%20Emergency");
         }
     });
 }
 
 function initMap() {
-	  var uluru = {lat: lat, lng: long};
-	  var map = new google.maps.Map(document.getElementById('map'), {
-	    zoom: 15,
-	    center: uluru
-	  });
-	  var marker = new google.maps.Marker({
-	    position: uluru,
-	    map: map
-	  });
-	  
-	}
+    var uluru = {
+        lat: lat,
+        lng: long
+    };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: uluru
+    });
+    var marker = new google.maps.Marker({
+        position: uluru,
+        map: map
+    });
+}
 
 function fetchWeather() {
     $.ajax({
@@ -59,37 +59,24 @@ function fetchWeather() {
             weather_city = response.location.city;
             temp = response.current_observation.temperature_string;
             weatherIcon = "<img style='margin: 20px' src=" + response.current_observation.icon_url + ">";
-            
             $("#weatherCard").html(generateCard(weather_city, "#", temp, weatherIcon));
         }
     });
 }
-
-
-
+// CARD UTILITY FUNCTIONS
 function generateCard(title, url, subtitle, content) {
-    var card = "<div class='card'>" +
-                    "<div class='header'>" +
-                        "<h4 class='title'>";
-
-                        if (url != "#") {
-                            card += "<a href='" + clean(url) + "'>" + clean(title) + "</a>";
-                        } else {
-                            card += clean(title);
-                        }
-
-                card += "</h4>" + 
-                        "<p class='category'>" + clean(subtitle) + "</p>" +
-                    "</div>" +
-                    "<div class='content'>" + content + "</div>" +
-                "</div>";
-    return card;    
+    var card = "<div class='card'>" + "<div class='header'>" + "<h4 class='title'>";
+    if (url != "#") {
+        card += "<a href='" + clean(url) + "'>" + clean(title) + "</a>";
+    } else {
+        card += clean(title);
+    }
+    card += "</h4>" + "<p class='category'>" + clean(subtitle) + "</p>" + "</div>" + "<div class='content'>" + content + "</div>" + "</div>";
+    return card;
 }
 
-// String imgURL, json body
 function generateContent(imgURL, body) {
-    var content =   "<img height='120px' src='" + imgURL + "'>" +
-                    "<p>" + clean(body) + "</p>"
+    var content = "<img height='120px' src='" + imgURL + "'>" + "<p>" + clean(body) + "</p>"
     return content;
 }
 
