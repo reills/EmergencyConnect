@@ -5,68 +5,66 @@
 const news_api_key = "4a4f44aaabb84ddb9f8523e725b22757";
 const nyt_api_key = "888fd10628734e11810b44d6df4480f3";
 
-const ap_news_element = "#APNews";
-const nyt_news_element = "#NYTNews";
-const all_news_element = "#allNews";
-
 var cards = [];
-const maxArticles = 5;
+const maxArticles = 10;
 
-function fetchAP() {
-    console.log("Fetching news from Associated Press...");
+// Loads news from the Associated Press into the news feed
+function loadAP() {
     $.ajax({
         dataType: "json",
         url: "https://newsapi.org/v1/articles?source=associated-press&sortBy=top&apiKey=" + news_api_key,
         success: function(response) {
-            console.log(response);
-            $(ap_news_element).html("");
+            // console.log(response);
 
             articles = response.articles;
-            for (var i = 0; i < articles.length && i < maxArticles; i++) {
+            for (var i = 0; i < articles.length && i < 5; i++) {
+
                 currentArticle = articles[i];
                 title = JSON.stringify(currentArticle.title);
                 url = JSON.stringify(currentArticle.url);
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
                 description = clean(currentArticle.description);
+
                 // cards.push(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
                 // console.log(cards);
                 $("#news-feed").append(generateCard(title, url, "Associated Press", img + "<p>" + description + "</p>"));
+                console.log("Received card: Associated Press");
             }
         }
     });
 }
 
-function loadAllNewsTopic(topic) {
-    console.log("Fetching news from all sources by topic...");
+// Loads articles from all sources based on query into cards
+function loadTopic(topic) {
     $.ajax({
         url: "https://newsapi.org/v2/everything?q=" + topic + "&language=en&apiKey=" + news_api_key,
         dataType: "json",
         success: function(response) {
-            console.log(response);
-            $(all_news_element).html("");
+            // console.log(response);
 
             articles = response.articles;
             for (var i = 0; i < articles.length && i < maxArticles; i++) {
+
                 currentArticle = articles[i];
                 title = currentArticle.title;
                 url = currentArticle.url;
                 img = "<img height='120px' src='" + currentArticle.urlToImage + "'>";
+
                 cards.push(generateCard(title, url, topic.replace(/%20/g," "), img + "<p>" + clean(description) + "</p>"));
-                console.log(cards);
+                console.log("Received card: " + topic.replace(/%20/g," "));
             }
         }
     });
 }
 
-function fetchNYT(city) {
-    console.log("Fetching news from New York Times...");
-
+// Loads articles from the New York Times based on query into cards
+function loadNYT(city) {
     $.ajax({
         url: "https://api.nytimes.com/svc/search/v2/articlesearch.json?" + $.param({'api-key': nyt_api_key, 'q': city }),
         dataType: "json",
         method: "GET",
         success: function(response) {
-            console.log(response);
+            // console.log(response);
 
             articles = response.response.docs;
             for (var i = 0; i < articles.length && i < maxArticles; i++) {
@@ -76,41 +74,14 @@ function fetchNYT(city) {
                     headline = currentArticle.headline.main;
                     webURL = JSON.stringify(currentArticle.web_url);
                     webURL = webURL.substring(1, webURL.length - 1);
-                    imgURL = "https://www.nytimes.com/" + clean(currentArticle.multimedia[0].url).slice(1, -1);
+                    imgURL = "https://www.nytimes.com/" + clean(currentArticle.multimedia[0].url);
                     content = generateContent(imgURL, currentArticle.snippet);
+
                     cards.push(generateCard(headline, webURL, "The New York Times", content));
-                console.log(cards);
+                    console.log("Received card: The New York Times");
                 }
 
             }
         }
     });
-}
-
-function generateCard(title, url, subtitle, content) {
-    var card = "<div class='card'>" +
-                    "<div class='header'>" +
-                        "<h4 class='title'>" +"<a href='" + clean(url) + "'>" + clean(title) + "</a>" + "</h4>" + 
-                        "<p class='category'>" + clean(subtitle) + "</p>" +
-                    "</div>" +
-                    "<div class='content'>" + content + "</div>" +
-                "</div>";
-    return card;    
-}
-
-function printNews(num) {
-    for (var i = 0; i < num; i++) {
-        $("#news-feed").append(cards.pop());
-    }
-}
-
-// String imgURL, json body
-function generateContent(imgURL, body) {
-    var content =   "<img height='120px' src='" + imgURL + "'>" +
-                    "<p>" + clean(body) + "</p>"
-    return content;
-}
-
-function clean(input_string) {
-    return JSON.stringify(input_string).replace(/\\/g, "");
 }
