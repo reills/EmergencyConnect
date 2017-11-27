@@ -176,9 +176,9 @@ function getUsersFriends() {
 
 //refreshes the logged in user's friend list. Currently set to refresh every 5000  milliseconds (5 seconds) 
 //TURNED OFFF for now -- it makes a lot of database calls
-//	setInterval(function() {
-//	    getUsersFriends();
-//	}, 5000);
+	// setInterval(function() {
+	//     getUsersFriends();
+	// }, 5000);
 
 
 //removes the whole row of the button specified and the friend to remove in the databaseServlet
