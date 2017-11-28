@@ -60,15 +60,16 @@ img {
 
 #safe_status {
     background-color: #4CAF50; /* Green */
-    text-align: center;
+    text-align: center important;
     color: black;
     text-decoration: none;
     pointer-events: none;
+    width: 97px;
 }
 
 #pending_status {
     background-color: #fffa00; /* Yellow */
-    text-align: center;
+    text-align: center ;
     color: black;
     text-decoration: none;
     pointer-events: none;
@@ -80,6 +81,7 @@ img {
     color: black;
     text-decoration: none;
     pointer-events: none;
+    width: 97px;
 }
 
 
@@ -143,7 +145,8 @@ img {
 }
 
 .resultNames{
- 	padding-right: 20%;
+ 	float: left;
+	width: 40%;
  }
 
 p.input { 
@@ -212,3 +215,4 @@ div.timeline-Widget > div.timeline-Header > h1 > a.customisable-highlight{
 	background-color: #FB404B !important;
 	background: linear-gradient(to bottom, #FB404B 0%, #bb0502 100%) !important;
 }
+

@@ -49,6 +49,9 @@ $('#searchbar').keydown(function(e) {
 	        	 console.log("first user id:" + responseText[0].userId);
 	        	 var i; 
 	        	 var responseJson = responseText;
+	        	
+	        	 var $ul = $("<div class='friendWrapper' >").appendTo($("#searchResults"));
+	        	 
 	        	 for(i=0; i<responseJson.length; i++){
 	        		 var name = responseJson[i].username;
 	        		 var id = responseJson[i].userId;
@@ -56,10 +59,12 @@ $('#searchbar').keydown(function(e) {
 	        		 //$("#searchResults").append("<div style='display:inline-block' class='row'><div class='col-md-6' ><p style='font-size:15px;'>"+name+"</p></div><div class='col-md-6'><button id="+id+" style='vertical-align:'text-bottom' type='button' value='Follow'>Follow</button></div></div><br>"); 
 //	        		 $("#searchResults").append("<p class='box'><span class='resultNames'>"+name+"</span> <input id='"+id+"' onclick='follow(&apos;"+name+"&apos;,&apos;"+id+"&apos;)&quot; type=&apos;button&apos; value=&apos;Follow&apos;/></p>"); 
 	        		 var val = "Mark";
-	        		 var str = "<p class='box'>" +
-	        		 "<span class='resultNames'>"+name+"</span>" +
-	        		 "<input type='button' id='"+id+"' onclick=\"follow('"  + Cookies.get("username") + "'," + id + ")\" value='Follow'></input>" +
-	        		 "</p>";
+	        		 var $str = ("<div class='row'>" +
+	        		 "<div class='resultNames'>"+responseJson[i].fullName+"</div>" +
+	        		 "<div class= class='resultNames'> <input type='button' name='add"+id+"' id='add"+id+"' class='btn' onclick=\"follow('"  + Cookies.get("username") + "'," + id + ")\" value='Follow'></input> </div>" +
+	        		 "</div>");
+	        		 
+	        		 ($ul).append($str);
 	        		 
 //	        		 var inputElement = document.createElement('input');
 //	        		 inputElement.type = "button"
@@ -67,8 +72,9 @@ $('#searchbar').keydown(function(e) {
 //		        		 $("#searchResults").append("<p class='box'><span class='resultNames'>"+name+"</span> <input id='"+id+"' onclick='follow(&apos;"+name+"&apos;,&apos;"+id+"&apos;)&quot; type=&apos;button&apos; value=&apos;Follow&apos;/></p>"); 
 //
 //	        		 });
-	        		 $("#searchResults").append(str); 	
+	        		 
 	        	 }
+	        	 ($ul).append("</div>");
 	        	 $("#searchModal").show();
          } else {
         	 	$("#searchResults").html("");
@@ -105,8 +111,8 @@ $('#searchbar').keydown(function(e) {
 //  });
 
 function follow(followeeUsername,id){
-	console.log("clicked follow!!");
-	$('#'+id).val("Followed ✔");
+	console.log("clicked follow!! " + id);
+	$('#add'+id).val("Followed ✔");
 	    
 	        var params = {
 	            userID: followeeUsername,
