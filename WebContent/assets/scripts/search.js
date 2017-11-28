@@ -4,6 +4,7 @@
 // Open and close login form
 $("#searchClose").click(function() {
 	$("#searchModal").hide();
+	$("#searchbar").val("");
 	getUsersFriends();
    
 })
@@ -155,15 +156,15 @@ function getUsersFriends() {
 			    	 	($divRow).append(" <div class='friendColName'> <p style='display:inline' > <a href=mailto:" + friendsJSON[i].email + " >" + friendsJSON[i].fullName + "</p> </div>");
 			    	 	
 			    		if( friendsJSON[i].status == "pending") {
-			    			($divRow).append("<div class='friendColButton'> <button id='pending_status'> Pending... </button> </div> ");
+			    			($divRow).append("<div class='friendColButton'> <button id='pending_status' class='btn' > Pending... </button> </div> ");
 			    		}
 			    		else if(friendsJSON[i].status == "notsafe" ) {
-			    			($divRow).append("<div class='friendColButton'> <button id='danger_status'>  Not Safe  </button> </div>");
+			    			($divRow).append("<div class='friendColButton'> <button id='danger_status' class='btn btn-danger'>  Not Safe  </button> </div>");
 			    		}else {
-			    			($divRow).append("<div class='friendColButton'> <button id='safe_status'> Safe </button> </div>");
+			    			($divRow).append("<div class='friendColButton'> <button id='safe_status' class='btn btn-success'> Safe </button> </div>");
 			    		}
 			    		
-			    		($divRow).append("<div class='friendColButton'> <button id='removeFriend'" + friendsJSON[i].userId + "' onclick=\"remove('"  +  params.username + "'," + friendsJSON[i].userId + ")\" > Remove </button> </div>");
+			    		($divRow).append("<div class='friendColButton'> <button id='removeFriend'" + friendsJSON[i].userId + "' onclick=\"remove('"  +  params.username + "'," + friendsJSON[i].userId + ")\" class='btn btn-danger' > Remove </button> </div>");
 			    		($divRow).append("</div>");
 			    	}
 			    	
