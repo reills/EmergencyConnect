@@ -90,25 +90,25 @@ $('#searchbar').keydown(function(e) {
 
 //live search: as user types a key into the searchbar, 
 //makes an ajax call to retrieve results if user clicks drop down item, search is called
-// $(document).ready(function() {
-//     $("#searchbar").keyup(function() {
-//         var params = {
-//             inputType: "liveSearch",
-//             value: $("#searchbar").val()
-//         };
-//         $.post("HomepageServlet", $.param(params), function(responseJson) {
-//             var availableTags = $.map(responseJson, function(el) {
-//                 return el;
-//             });
+ $(document).ready(function() {
+     $("#searchbar").keyup(function() {
+         var params = {
+             inputType: "liveSearch",
+             value: $("#searchbar").val()
+         };
+         $.post("HomepageServlet", $.param(params), function(responseJson) {
+             var availableTags = $.map(responseJson, function(el) {
+                 return el;
+             });
             
-//             $("#searchbar").autocomplete({
-//                 source: availableTags,
-//                 select: function(event, ui) {
-//                     $("#search_button").click(); }
-//             })
-//         });
-//      });
-//  });
+             $("#searchbar").autocomplete({
+                 source: availableTags,
+                 select: function(event, ui) {
+                     $("#search_button").click(); }
+             })
+         });
+      });
+     });
 
 function follow(followeeUsername,id){
 	console.log("clicked follow!! " + id);
@@ -183,9 +183,9 @@ function getUsersFriends() {
 
 //refreshes the logged in user's friend list. Currently set to refresh every 5000  milliseconds (5 seconds) 
 //TURNED OFFF for now -- it makes a lot of database calls
-	// setInterval(function() {
-	//     getUsersFriends();
-	// }, 5000);
+	 setInterval(function() {
+	     getUsersFriends();
+	 }, 5000);
 
 
 //removes the whole row of the button specified and the friend to remove in the databaseServlet
